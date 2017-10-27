@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.approxteam.antcolosseumserver.entities;
+package com.approxteam.casino.entities;
 
 import java.io.Serializable;
 import java.util.Date;
