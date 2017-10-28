@@ -12,8 +12,8 @@ package com.approxteam.casino.interfaces.mailer;
  */
 public class ActivationMail extends MailWrapper{
     
-    private static String defaultFrom = "antcolosseum@gmail.com";
-    private static String defaultTitle = "AntColosseum activation";
+    private static String defaultFrom = "approxredmine@gmail.com";
+    private static String defaultTitle = "Casino activation";
     
     public ActivationMail(String to, String activationLink, String nickName) {
         super(defaultFrom, to, defaultTitle, getDefaultContent(activationLink, nickName));
@@ -39,6 +39,6 @@ public class ActivationMail extends MailWrapper{
     }
     
     private static String getFooter() {
-        return "Have a nice game!";
+        return "Good luck!";
     }
 }
