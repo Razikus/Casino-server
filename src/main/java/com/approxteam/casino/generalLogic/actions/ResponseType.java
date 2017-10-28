@@ -5,6 +5,7 @@
  */
 package com.approxteam.casino.generalLogic.actions;
 
+import com.approxteam.casino.generalLogic.actions.notifyType.NotifyState;
 import com.approxteam.casino.generalLogic.actions.notifyType.NotifyType;
 import java.io.Serializable;
 
@@ -13,35 +14,37 @@ import java.io.Serializable;
  * @author adamr
  */
 public enum ResponseType implements Serializable {
-    OK("Success"),
-    ERROR("Undefined Error", NotifyType.TOASTERROR),
-    REGISTERERROR_EMAILORLOGINEXIST("E-mail or login exists", NotifyType.TOASTERROR),
-    REGISTEROK("Succesful registered"),
-    LOGINOK("Succesful login"),
-    LOGINERROR_BADLOGINORPASSWORD("Bad login or password", NotifyType.TOASTERROR),
-    ACCOUNTACTIVATION_BADLOGINORTOKEN("Bad nickname or token :(", NotifyType.TOASTERROR),
-    ACCOUNTACTIVATIONOK("Succesful activated"),
-    NOTACTIVATED("Not activated :(", NotifyType.TOASTERROR), 
-    ACCOUNTACTIVATION_TOKENALREADYACTIVATED("Token is already activated", NotifyType.TOASTERROR);
+    OK("SUCCESS"),
+    ERROR("UNDEFINED_ERROR", NotifyType.TOAST, NotifyState.ERROR),
+    REGISTERERROR_EMAILORLOGINEXIST("EMAIL_OR_LOGIN_EXISTS", NotifyType.TOAST, NotifyState.ERROR),
+    REGISTEROK("SUCCESSFULL_REGISTERED"),
+    LOGINOK("SUCCESSFULL_LOGIN"),
+    LOGINERROR_BADLOGINORPASSWORD("BAD_LOGIN_OR_PASSWORD", NotifyType.TOAST, NotifyState.ERROR),
+    ACCOUNTACTIVATION_BADLOGINORTOKEN("BAD_NICKNAME_OR_TOKEN", NotifyType.TOAST, NotifyState.ERROR),
+    ACCOUNTACTIVATIONOK("SUCCESSFUL_ACTIVATION"),
+    NOTACTIVATED("NOT_ACTIVATED", NotifyType.TOAST, NotifyState.ERROR), 
+    ACCOUNTACTIVATION_TOKENALREADYACTIVATED("TOKEN_IS_ACTIVATED", NotifyType.TOAST, NotifyState.ERROR);
     
     private String description;
     private NotifyType notifyType;
+    private NotifyState notifyState;
 
-    private ResponseType(String description, NotifyType notifyType) {
+    private ResponseType(String description, NotifyType notifyType, NotifyState state) {
         this.description = description;
         this.notifyType = notifyType;
+        this.notifyState = state;
     }
     
     private ResponseType(String description) {
-        this(description, NotifyType.TOASTOK);
+        this(description, NotifyType.TOAST, NotifyState.SUCCESS);
     }
     
     private ResponseType() {
-        this("", NotifyType.TOASTOK);
+        this("");
     }
     
-    private ResponseType(NotifyType notifyType) {
-        this("", notifyType);
+    private ResponseType(NotifyType notifyType, NotifyState state) {
+        this("", notifyType, state);
     }
 
     public String getDescription() {
@@ -51,6 +54,12 @@ public enum ResponseType implements Serializable {
     public NotifyType getNotifyType() {
         return notifyType;
     }
+
+    public NotifyState getNotifyState() {
+        return notifyState;
+    }
+    
+    
     
     
     

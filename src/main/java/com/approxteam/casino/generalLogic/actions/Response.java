@@ -5,6 +5,7 @@
  */
 package com.approxteam.casino.generalLogic.actions;
 
+import com.approxteam.casino.generalLogic.actions.notifyType.NotifyState;
 import com.approxteam.casino.generalLogic.actions.notifyType.NotifyType;
 import java.io.Serializable;
 
@@ -17,32 +18,34 @@ public class Response implements Serializable {
     private ResponseType type;
     private String description;
     private NotifyType notifyType;
+    private NotifyState notifyState;
     private String[] args;
 
-    public Response(ResponseType type, String description, NotifyType notifyType, String ... args) {
+    public Response(ResponseType type, String description, NotifyType notifyType, NotifyState notifyState, String ... args) {
         this.type = type;
         this.description = description;
         this.notifyType = notifyType;
+        this.notifyState = notifyState;
         this.args = args;
     }
     
     public Response(ResponseType type) {
-        this(type, type.getDescription(), type.getNotifyType(), new String[0]);
+        this(type, type.getDescription(), type.getNotifyType(), type.getNotifyState(), new String[0]);
     }
     public Response(ResponseType type, NotifyType notifyType) {
-        this(type, type.getDescription(), notifyType, new String[0]);
+        this(type, type.getDescription(), notifyType, type.getNotifyState(), new String[0]);
     }
     
     public Response(ResponseType type, String ... args) {
-        this(type, type.getDescription(), type.getNotifyType(), args);
+        this(type, type.getDescription(), type.getNotifyType(), type.getNotifyState(), args);
     }
     
     public Response(String description, ResponseType type, String ... args) {
-        this(type, description, type.getNotifyType(), args);
+        this(type, description, type.getNotifyType(), type.getNotifyState(), args);
     }
     
     public Response(ResponseType type, NotifyType notifyType, String ... args) {
-        this(type, type.getDescription(), notifyType, args);
+        this(type, type.getDescription(), notifyType, type.getNotifyState(), args);
     }
 
     public ResponseType getType() {
@@ -64,6 +67,12 @@ public class Response implements Serializable {
     public String getClassName() {
         return className;
     }
+
+    public NotifyState getNotifyState() {
+        return notifyState;
+    }
+    
+    
     
     
     
@@ -83,7 +92,7 @@ public class Response implements Serializable {
         return new Response(type, notifyType, args);
     }
     
-    public static Response of(ResponseType type, String description, NotifyType notifyType, String ... args) {
-        return new Response(type, description, notifyType, args);
+    public static Response of(ResponseType type, String description, NotifyType notifyType, NotifyState notifyState, String ... args) {
+        return new Response(type, description, notifyType, notifyState, args);
     }
 }

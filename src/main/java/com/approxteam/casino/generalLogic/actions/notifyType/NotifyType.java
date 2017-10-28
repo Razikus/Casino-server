@@ -5,30 +5,17 @@
  */
 package com.approxteam.casino.generalLogic.actions.notifyType;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  *
  * @author RAZ
  */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum NotifyType {
-    TOASTOK(NotifyState.SUCCESS),
-    TOASTERROR(NotifyState.ERROR);
-    
-    private NotifyState state;
+    TOAST();
 
-    private NotifyType(NotifyState state) {
-        this.state = state;
-    }
+ 
     
-    private NotifyType() {
-        this.state = NotifyState.INFORMATION;
-    }
-
-    public NotifyState getState() {
-        return state;
-    }
+    
     
     
     
