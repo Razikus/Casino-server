@@ -10,6 +10,8 @@ import com.approxteam.casino.configuration.PropertyComment;
 import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.AccountActivation;
 import com.approxteam.casino.generalLogic.actions.Action;
+import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
+import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
 import com.approxteam.casino.interfaces.Mailer;
 import com.approxteam.casino.interfaces.RegisterBean;
 import com.approxteam.casino.interfaces.mailer.ActivationMail;
@@ -48,9 +50,9 @@ public class WebSocketRegisterer implements RegisterBean{
     
     @Override
     public boolean register(Action action){
-        String nickName = action.getRegisterDivisor().getLogin();
-        String password = action.getRegisterDivisor().getPassword();
-        String email = action.getRegisterDivisor().getEmail();
+        String nickName = ArgUtils.getParameterString(action, ActionParameter.LOGIN);
+        String password = ArgUtils.getParameterString(action, ActionParameter.PASSWORD);
+        String email = ArgUtils.getParameterString(action, ActionParameter.EMAIL);
         Account account = new Account();
         account.setEmail(email);
         account.setPassword(password);
@@ -89,7 +91,7 @@ public class WebSocketRegisterer implements RegisterBean{
    
     @Override
     public Account findAccount(Action action) {
-        String login = action.getLoginDivision().getLogin();
+        String login = ArgUtils.getParameterString(action, ActionParameter.LOGIN);
         return find(login);
         
     } 
@@ -128,12 +130,12 @@ public class WebSocketRegisterer implements RegisterBean{
 
     @Override
     public boolean activate(Action action) {
-        String token = action.getActivateDivisor().getToken();
+        String token = ArgUtils.getParameterString(action, ActionParameter.TOKEN);
         AccountActivation playerActivation = findActivation(token);
         if(playerActivation == null) {
             return false;
         }
-        String actionNickName = action.getActivateDivisor().getNickname();
+        String actionNickName = ArgUtils.getParameterString(action, ActionParameter.NICKNAME);
         if(!actionNickName.equals(playerActivation.getAccount().getNickname())) {
             return false;
         }

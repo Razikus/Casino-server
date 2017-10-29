@@ -14,6 +14,8 @@ import com.approxteam.casino.generalLogic.actions.Action;
 import com.approxteam.casino.generalLogic.actions.Response;
 import com.approxteam.casino.generalLogic.actions.ResponseType;
 import com.approxteam.casino.generalLogic.actions.SessionUtils;
+import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
+import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
 import com.approxteam.casino.interfaces.RegisterBean;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -27,7 +29,7 @@ public class LoginConsumer implements BiConsumer<PlayerHandler, Action> {
     public void accept(PlayerHandler t, Action u) {
         RegisterBean bean = ContextUtils.getRegisterBean();
         Account player = bean.findAccount(u);
-        Response response = getProperlyResponse(player, u.getLoginDivision().getPassword());
+        Response response = getProperlyResponse(player, ArgUtils.getParameterString(u, ActionParameter.PASSWORD));
         if(response.getType().equals(ResponseType.LOGINOK)) {
             t.switchState(PlayerState.CHOOSING);
         }

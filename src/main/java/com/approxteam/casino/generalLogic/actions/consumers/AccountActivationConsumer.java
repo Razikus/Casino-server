@@ -12,6 +12,8 @@ import com.approxteam.casino.generalLogic.actions.Action;
 import com.approxteam.casino.generalLogic.actions.Response;
 import com.approxteam.casino.generalLogic.actions.ResponseType;
 import com.approxteam.casino.generalLogic.actions.SessionUtils;
+import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
+import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
 import com.approxteam.casino.interfaces.RegisterBean;
 import java.util.function.BiConsumer;
 
@@ -25,7 +27,7 @@ public class AccountActivationConsumer implements BiConsumer<PlayerHandler, Acti
     public void accept(PlayerHandler t, Action u) {
         RegisterBean bean = ContextUtils.getRegisterBean();
         Response response = Response.of(ResponseType.ERROR);
-        AccountActivation activation = bean.findActivation(u.getActivateDivisor().getToken());
+        AccountActivation activation = bean.findActivation(ArgUtils.getParameterString(u, ActionParameter.TOKEN));
         if(activation != null && activation.isActivated()) {
             response = Response.of(ResponseType.ACCOUNTACTIVATION_TOKENALREADYACTIVATED);
         } else {
