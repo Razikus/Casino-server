@@ -13,7 +13,6 @@ import com.approxteam.casino.generalLogic.actions.Action;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
 import com.approxteam.casino.interfaces.Mailer;
-import com.approxteam.casino.interfaces.RegisterBean;
 import com.approxteam.casino.interfaces.mailer.ActivationMail;
 import com.approxteam.casino.interfaces.mailer.MailWrapper;
 import java.util.Date;
@@ -29,6 +28,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
+import com.approxteam.casino.interfaces.AccountManager;
 
 /**
  *
@@ -36,9 +36,9 @@ import org.apache.logging.log4j.LogManager;
  */
 @Stateful
 @PropertyComment(desc = "Provide default link")
-public class WebSocketRegisterer implements RegisterBean{
+public class WebSocketAccountManager implements AccountManager{
 
-    private final Properties properties = PropertiesBuilder.getProperties(WebSocketRegisterer.class);
+    private final Properties properties = PropertiesBuilder.getProperties(WebSocketAccountManager.class);
     
     @PersistenceContext(unitName = "casinoPU")
     private EntityManager entityManager;
@@ -46,13 +46,10 @@ public class WebSocketRegisterer implements RegisterBean{
     @EJB
     private Mailer mailer;
     
-    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(WebSocketRegisterer.class);
+    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(WebSocketAccountManager.class);
     
     @Override
-    public boolean register(Action action){
-        String nickName = ArgUtils.getParameterString(action, ActionParameter.LOGIN);
-        String password = ArgUtils.getParameterString(action, ActionParameter.PASSWORD);
-        String email = ArgUtils.getParameterString(action, ActionParameter.EMAIL);
+    public boolean register(String nickName, String password, String email){
         Account account = new Account();
         account.setEmail(email);
         account.setPassword(password);
@@ -90,8 +87,7 @@ public class WebSocketRegisterer implements RegisterBean{
     }
    
     @Override
-    public Account findAccount(Action action) {
-        String login = ArgUtils.getParameterString(action, ActionParameter.LOGIN);
+    public Account findAccount(String login) {
         return find(login);
         
     } 
@@ -129,13 +125,11 @@ public class WebSocketRegisterer implements RegisterBean{
     }
 
     @Override
-    public boolean activate(Action action) {
-        String token = ArgUtils.getParameterString(action, ActionParameter.TOKEN);
+    public boolean activate(String token, String actionNickName) {
         AccountActivation playerActivation = findActivation(token);
         if(playerActivation == null) {
             return false;
         }
-        String actionNickName = ArgUtils.getParameterString(action, ActionParameter.NICKNAME);
         if(!actionNickName.equals(playerActivation.getAccount().getNickname())) {
             return false;
         }

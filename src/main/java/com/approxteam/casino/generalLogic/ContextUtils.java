@@ -6,12 +6,12 @@
 package com.approxteam.casino.generalLogic;
 
 import com.approxteam.casino.interfaces.Mailer;
-import com.approxteam.casino.interfaces.RegisterBean;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 import org.apache.logging.log4j.LogManager;
+import com.approxteam.casino.interfaces.AccountManager;
 
 /**
  *
@@ -36,14 +36,14 @@ public class ContextUtils {
         }
     }
     
-    public static RegisterBean getRegisterBean() {
-        RegisterBean registerer = null;
+    public static AccountManager getAccountManager() {
+        AccountManager registerer = null;
         try {
             Context context = getCtx();
             Object o = context.lookup("java:module/WebSocketRegisterer");
-            registerer = (RegisterBean) PortableRemoteObject.narrow(o, RegisterBean.class);
+            registerer = (AccountManager) PortableRemoteObject.narrow(o, AccountManager.class);
         } catch (NamingException ex) {
-            log.error("FAILED TO GET REGISTERBEAN - CONTEXTUTILS");
+            log.error("FAILED TO GET AccountManager - CONTEXTUTILS");
         }
         return registerer;
     }

@@ -9,7 +9,6 @@ import com.approxteam.casino.generalLogic.CasinoUsersHandler;
 import com.approxteam.casino.generalLogic.PlayerHandler;
 import com.approxteam.casino.generalLogic.actions.Action;
 import com.approxteam.casino.interfaces.Recognizer;
-import com.approxteam.casino.interfaces.register.WebSocketRegisterer;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;

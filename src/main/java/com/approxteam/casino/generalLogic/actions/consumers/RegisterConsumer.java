@@ -11,8 +11,10 @@ import com.approxteam.casino.generalLogic.actions.Action;
 import com.approxteam.casino.generalLogic.actions.Response;
 import com.approxteam.casino.generalLogic.actions.ResponseType;
 import com.approxteam.casino.generalLogic.actions.SessionUtils;
-import com.approxteam.casino.interfaces.RegisterBean;
+import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
+import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
 import java.util.function.BiConsumer;
+import com.approxteam.casino.interfaces.AccountManager;
 
 /**
  *
@@ -22,9 +24,13 @@ public class RegisterConsumer implements BiConsumer<PlayerHandler, Action>  {
 
     @Override
     public void accept(PlayerHandler t, Action u) {
-        RegisterBean bean = ContextUtils.getRegisterBean();
+        AccountManager bean = ContextUtils.getAccountManager();
         Response response = Response.of(ResponseType.ERROR);
-        boolean registered = bean.register(u);
+        
+        String nickName = ArgUtils.getParameterString(u, ActionParameter.LOGIN);
+        String password = ArgUtils.getParameterString(u, ActionParameter.PASSWORD);
+        String email = ArgUtils.getParameterString(u, ActionParameter.EMAIL);
+        boolean registered = bean.register(nickName, password, email);
         if(registered) {
             response = Response.of(ResponseType.REGISTEROK);
         } else {

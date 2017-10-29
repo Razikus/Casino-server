@@ -15,14 +15,14 @@ import javax.ejb.Remote;
  * @author adamr
  */
 @Remote
-public interface RegisterBean {
-    public boolean register(Action action);
+public interface AccountManager {
+    public boolean register(String login, String password, String email);
     
-    public boolean activate(Action action);
+    public boolean activate(String login, String token);
     
     public void sendActivationLink(String email, String nickName, String token);
     
-    public Account findAccount(Action action);
+    public Account findAccount(String login);
     
     public AccountActivation findActivation(String token);
 }
