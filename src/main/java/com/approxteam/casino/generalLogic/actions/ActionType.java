@@ -15,32 +15,26 @@ import java.io.Serializable;
  */
 public enum ActionType implements Serializable {
     
-    ACTION(Views.ActionView.class),
-    REGISTER(Views.RegisterActionView.class, ActionConsumer.REGISTER),
-    LOGIN(Views.LoginActionView.class, ActionConsumer.LOGIN),
-    ACCOUNTACTIVATION(Views.AccountActivationActionView.class, ActionConsumer.ACCOUNTACTIVATION);
+    ACTION(),
+    REGISTER(ActionConsumer.REGISTER),
+    LOGIN(ActionConsumer.LOGIN),
+    ACCOUNTACTIVATION(ActionConsumer.ACCOUNTACTIVATION);
     
-    private Class viewClass;
     private ObjectMapper mapper = new ObjectMapper();
     private ActionConsumer consumer;
 
-    
-    private ActionType(Class viewClass) {
-        this.viewClass = viewClass;
+    private ActionType() {
+        
     }
     
-    private ActionType(Class viewClass, ActionConsumer consumer) {
-        this.viewClass = viewClass;
+    private ActionType(ActionConsumer consumer) {
         this.consumer = consumer;
     }
     
     public Action getActionFor(String what) throws IOException {
-        return mapper.readerWithView(viewClass).forType(Action.class).readValue(what);
+        return mapper.readValue(what, Action.class);
     }
 
-    public Class getViewClass() {
-        return viewClass;
-    }
 
     public ActionConsumer getConsumer() {
         return consumer;

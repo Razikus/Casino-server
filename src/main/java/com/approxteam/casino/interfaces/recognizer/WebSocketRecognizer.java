@@ -6,7 +6,6 @@
 package com.approxteam.casino.interfaces.recognizer;
 
 import com.approxteam.casino.generalLogic.actions.Action;
-import com.approxteam.casino.generalLogic.actions.Views;
 import com.approxteam.casino.interfaces.Recognizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -34,7 +33,7 @@ public class WebSocketRecognizer implements Recognizer{
     }
     
     public Action getAccordingBaseAction(String data) throws IOException {
-        return mapper.readerWithView(Views.ActionView.class).forType(Action.class).readValue(data);
+        return mapper.readValue(data, Action.class);
     }
     
 }

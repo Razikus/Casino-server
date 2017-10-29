@@ -5,7 +5,6 @@
  */
 package com.approxteam.casino.generalLogic.actions;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -14,10 +13,8 @@ import java.util.Map;
  * @author adamr
  */
 public class Action implements Serializable {
-    @JsonView(Views.ActionView.class)
     private ActionType type;
     
-    @JsonView(Views.ActionView.class)
     private Map<String, String> args;
     
     public ActionType getType() {

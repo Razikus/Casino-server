@@ -8,6 +8,7 @@ package com.approxteam.casino.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -41,6 +43,10 @@ public class Account implements Serializable {
     
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private List<AccountActivation> accountActivations = new ArrayList<>();
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    private Wallet wallet = new Wallet();
+    
 
     public Long getId() {
         return id;
@@ -73,6 +79,16 @@ public class Account implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+    
+    
 
     public List<AccountActivation> getAccountActivations() {
         return accountActivations;

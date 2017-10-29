@@ -7,13 +7,15 @@ package com.approxteam.casino.generalLogic.actions.predicates;
 
 import com.approxteam.casino.generalLogic.PlayerHandler;
 import com.approxteam.casino.generalLogic.PlayerState;
+import com.approxteam.casino.generalLogic.actions.Action;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
  *
  * @author adamr
  */
-public class InState implements Predicate<PlayerHandler> {
+public class InState implements BiPredicate<PlayerHandler, Action>  {
     private PlayerState[] playerStates;
     
     public InState(PlayerState ... playerStates) {
@@ -21,7 +23,7 @@ public class InState implements Predicate<PlayerHandler> {
     }
     
     @Override
-    public boolean test(PlayerHandler player) {
+    public boolean test(PlayerHandler player, Action action) {
         for(PlayerState state : playerStates) {
             if(player.getPlayerState().equals(state)) {
                 return true;

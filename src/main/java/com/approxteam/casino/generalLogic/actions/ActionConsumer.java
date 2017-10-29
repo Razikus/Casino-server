@@ -13,7 +13,7 @@ import com.approxteam.casino.generalLogic.actions.consumers.RegisterConsumer;
 import com.approxteam.casino.generalLogic.actions.predicates.InState;
 import java.io.Serializable;
 import java.util.function.BiConsumer;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 
 /**
  *
@@ -26,11 +26,11 @@ public enum ActionConsumer implements Serializable {
     ACCOUNTACTIVATION(new AccountActivationConsumer());
     
     private BiConsumer<PlayerHandler, Action> consumer;
-    private Predicate<PlayerHandler>[] predicates;
+    private BiPredicate<PlayerHandler, Action>[] predicates;
     
     
 
-    private ActionConsumer(BiConsumer<PlayerHandler, Action> consumer, Predicate<PlayerHandler> ... predicates) {
+    private ActionConsumer(BiConsumer<PlayerHandler, Action> consumer, BiPredicate<PlayerHandler, Action> ... predicates) {
         this.consumer = consumer;
         this.predicates = predicates;
     }
@@ -41,8 +41,8 @@ public enum ActionConsumer implements Serializable {
     
     public void consume(PlayerHandler session, Action action) {
         if(predicates != null && predicates.length != 0) {
-            for(Predicate<PlayerHandler> predicate : predicates) {
-                if(!predicate.test(session)) {
+            for(BiPredicate<PlayerHandler, Action> predicate : predicates) {
+                if(!predicate.test(session, action)) {
                     return;
                 }
             }
