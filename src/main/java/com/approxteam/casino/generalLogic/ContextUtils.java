@@ -9,9 +9,12 @@ import com.approxteam.casino.interfaces.Mailer;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.rmi.PortableRemoteObject;
 import org.apache.logging.log4j.LogManager;
 import com.approxteam.casino.interfaces.AccountManager;
+import com.approxteam.casino.interfaces.CasinoManager;
+import com.approxteam.casino.interfaces.casinomanager.WebSocketCasinoManager;
+import com.approxteam.casino.interfaces.mailer.WebSocketMailer;
+import com.approxteam.casino.interfaces.register.WebSocketAccountManager;
 
 /**
  *
@@ -37,27 +40,29 @@ public class ContextUtils {
     }
     
     public static AccountManager getAccountManager() {
-        AccountManager registerer = null;
-        try {
-            Context context = getCtx();
-            Object o = context.lookup("java:module/WebSocketAccountManager");
-            registerer = (AccountManager) PortableRemoteObject.narrow(o, AccountManager.class);
-        } catch (NamingException ex) {
-            log.error("FAILED TO GET AccountManager - CONTEXTUTILS");
-        }
-        return registerer;
+        return getBean(AccountManager.class, WebSocketAccountManager.class);
     }
     
     public static Mailer getMailer() {
-        Mailer mailer = null;
+        return getBean(Mailer.class, WebSocketMailer.class);
+    }
+    
+    public static CasinoManager getCasinoManager() {
+        return getBean(CasinoManager.class, WebSocketCasinoManager.class);
+    }
+    
+    
+    
+    private static <T, E> T getBean(Class<T> beanClass, Class<E> managerClass) {
+        T obtainedManager = null;
         try {
             Context context = getCtx();
-            Object o = context.lookup("java:module/WebSocketMailer");
-            mailer = (Mailer) PortableRemoteObject.narrow(o, Mailer.class);
+            Object o = context.lookup("java:module/" + managerClass.getSimpleName());
+            obtainedManager = beanClass.cast(o);
         } catch (NamingException ex) {
-            log.error("FAILED TO GET MAILER - CONTEXTUTILS");
+            log.error("FAILED TO GET" + managerClass.getSimpleName() + " - CONTEXTUTILS");
         }
-        return mailer;
+        return obtainedManager;
     }
     
 }

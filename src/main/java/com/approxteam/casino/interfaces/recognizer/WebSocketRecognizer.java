@@ -9,13 +9,13 @@ import com.approxteam.casino.generalLogic.actions.Action;
 import com.approxteam.casino.interfaces.Recognizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 
 /**
  *
  * @author adamr
  */
-@Stateless
+@Stateful
 public class WebSocketRecognizer implements Recognizer{
 
     private ObjectMapper mapper = new ObjectMapper();
@@ -25,7 +25,6 @@ public class WebSocketRecognizer implements Recognizer{
         try {
             Action act = getAccordingBaseAction(data);
             act = act.getType().getActionFor(data);
-            System.out.println(act);
             return act;
         } catch (IOException ex) {
             return null; 
