@@ -40,7 +40,7 @@ public class ContextUtils {
         AccountManager registerer = null;
         try {
             Context context = getCtx();
-            Object o = context.lookup("java:module/WebSocketRegisterer");
+            Object o = context.lookup("java:module/WebSocketAccountManager");
             registerer = (AccountManager) PortableRemoteObject.narrow(o, AccountManager.class);
         } catch (NamingException ex) {
             log.error("FAILED TO GET AccountManager - CONTEXTUTILS");
