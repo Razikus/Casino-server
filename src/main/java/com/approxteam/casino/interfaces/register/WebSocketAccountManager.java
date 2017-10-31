@@ -154,6 +154,16 @@ public class WebSocketAccountManager implements AccountManager{
         }
         return true;
     }
+    
+    private boolean merge(Object o) {
+        try {
+            entityManager.merge(o);
+            entityManager.flush();
+        } catch(Exception e) {
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public void sendActivationLink(String email, String nickName, String token) {
@@ -162,6 +172,7 @@ public class WebSocketAccountManager implements AccountManager{
 
     @Override
     public boolean activate(String token, String actionNickName) {
+        log.info("Trying to activate: " + token + " for: " + actionNickName);
         AccountActivation playerActivation = findActivation(token);
         if(playerActivation == null) {
             return false;
@@ -173,7 +184,7 @@ public class WebSocketAccountManager implements AccountManager{
         playerActivation.setActivated(true);
         playerActivation.setDateActivated(new Date());
         
-        return save(playerActivation);
+        return merge(playerActivation);
         
     }
 
@@ -190,6 +201,7 @@ public class WebSocketAccountManager implements AccountManager{
             AccountActivation result = query.getSingleResult();
             return result;
         } catch(Exception e) {
+            log.info(token + " not found - reason: " + e);
             return null;
         }
     }

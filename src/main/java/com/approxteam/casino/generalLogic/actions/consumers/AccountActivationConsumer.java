@@ -34,7 +34,7 @@ public class AccountActivationConsumer implements BiConsumer<PlayerHandler, Acti
             response = Response.of(ResponseType.ACCOUNTACTIVATION_TOKENALREADYACTIVATED);
         } else {
             String actionNickName = ArgUtils.getParameterString(u, ActionParameter.NICKNAME);
-            boolean activated = bean.activate(actionNickName, token);
+            boolean activated = bean.activate(token, actionNickName);
             if(activated) {
                 response = Response.of(ResponseType.ACCOUNTACTIVATIONOK);
             } else {
