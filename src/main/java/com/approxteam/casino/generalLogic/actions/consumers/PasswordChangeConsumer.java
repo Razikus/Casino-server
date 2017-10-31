@@ -27,12 +27,12 @@ public class PasswordChangeConsumer implements BiConsumer<PlayerHandler, Action>
     public void accept(PlayerHandler t, Action u) {   
         AccountManager bean = ContextUtils.getAccountManager();
         Response response = Response.of(ResponseType.ERROR);
-        String email = ArgUtils.getParameterString(u, ActionParameter.EMAIL);
+        String token = ArgUtils.getParameterString(u, ActionParameter.TOKEN);
         String newPassword = ArgUtils.getParameterString(u, ActionParameter.NEWPASSWORD);
-        AccountPasswordRequest acp = bean.findRequestByEmail(email);
+        AccountPasswordRequest acp = bean.findRequest(token);
         boolean b;
         if(acp != null){
-            b = bean.activateNewPassword(email,acp.getToken());
+            b = bean.activateNewPassword(acp.getAccount().getEmail(),acp.getToken());
             if(b){
                 response = Response.of(ResponseType.PASSWORDCHANGED);
             }

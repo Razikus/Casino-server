@@ -242,23 +242,6 @@ public class WebSocketAccountManager implements AccountManager{
         }      
         return status;       
     }
-
-    @Override
-    public AccountPasswordRequest findRequestByEmail(String email) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<AccountPasswordRequest> cq = cb.createQuery(AccountPasswordRequest.class);
-        Root<AccountPasswordRequest> accountPassRequest = cq.from(AccountPasswordRequest.class);
-        ParameterExpression<String> emailParameter = cb.parameter(String.class);
-        cq.select(accountPassRequest).where(cb.equal(accountPassRequest.get("email"), emailParameter));
-        TypedQuery<AccountPasswordRequest> query = entityManager.createQuery(cq);
-        query.setParameter(emailParameter, email);
-        try {
-            AccountPasswordRequest result = query.getSingleResult();
-            return result;
-        } catch(Exception e) {
-            return null;
-        }
-    }
     
     
 }

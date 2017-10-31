@@ -34,7 +34,5 @@ public interface AccountManager {
     boolean activateNewPassword(String email, String token);
     
     public AccountPasswordRequest findRequest(String token);
-    
-    public AccountPasswordRequest findRequestByEmail(String email);
-    
+        
 }
