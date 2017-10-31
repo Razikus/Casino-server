@@ -10,6 +10,7 @@ import com.approxteam.casino.generalLogic.PlayerHandler;
 import com.approxteam.casino.generalLogic.actions.Action;
 import com.approxteam.casino.interfaces.Recognizer;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -66,5 +67,10 @@ public class CasinoSocket {
                 action.getType().getConsumer().consume(playerHandler, action);
             }
         }
+    }
+    
+    @Schedule(hour="*", minute="*", second = "*/30", persistent = false)
+    public void refreshPlayersOnline() {
+        log.info("Not implemented yet :(");
     }
 }
