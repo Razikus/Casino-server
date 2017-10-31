@@ -7,6 +7,7 @@ package com.approxteam.casino.interfaces;
 
 import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.AccountActivation;
+import com.approxteam.casino.entities.AccountPasswordRequest;
 import com.approxteam.casino.generalLogic.actions.Action;
 import javax.ejb.Remote;
 
@@ -21,8 +22,19 @@ public interface AccountManager {
     public boolean activate(String login, String token);
     
     public void sendActivationLink(String email, String nickName, String token);
-    
+        
     public Account findAccount(String login);
     
     public AccountActivation findActivation(String token);
+    
+    public boolean generateAndSendPasswordChangeEmail(String email);
+    
+    public Account findAccountByEmail(String email);
+    
+    boolean activateNewPassword(String email, String token);
+    
+    public AccountPasswordRequest findRequest(String token);
+    
+    public AccountPasswordRequest findRequestByEmail(String email);
+    
 }

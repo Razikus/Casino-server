@@ -9,6 +9,7 @@ import com.approxteam.casino.configuration.PropertiesBuilder;
 import com.approxteam.casino.configuration.PropertyComment;
 import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.AccountActivation;
+import com.approxteam.casino.entities.AccountPasswordRequest;
 import com.approxteam.casino.generalLogic.actions.Action;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
@@ -29,6 +30,7 @@ import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import com.approxteam.casino.interfaces.AccountManager;
+import com.approxteam.casino.interfaces.mailer.PasswordChangeMail;
 
 /**
  *
@@ -90,7 +92,41 @@ public class WebSocketAccountManager implements AccountManager{
     public Account findAccount(String login) {
         return find(login);
         
-    } 
+    }
+    
+    private String constructPasswordChangeLink(String token, String nickname){
+        return properties.getProperty("appLink") + "index.html?nickname=" + nickname + "&" + "token=" + token;
+    }
+    
+     private MailWrapper constructPasswordChangeMail(String to, String nickName, String token) {
+        MailWrapper wrapper = new PasswordChangeMail(to, constructPasswordChangeLink(token, nickName), nickName);
+        return wrapper;
+    }
+    
+    @Override
+    public Account findAccountByEmail(String email){
+        return findByEmail(email);
+    }
+    
+    
+    
+    
+     private Account findByEmail(String mail) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Account> cq = cb.createQuery(Account.class);
+        Root<Account> account = cq.from(Account.class);
+        ParameterExpression<String> email = cb.parameter(String.class);
+        cq.select(account).where(cb.equal(account.get("Email"), email));
+        TypedQuery<Account> q = entityManager.createQuery(cq);
+        q.setParameter(email, mail);
+        try {
+            Account result = q.getSingleResult();
+            return result;
+        } catch(Exception e) {
+            return null;
+        }
+    }
+    
     
     
     private Account find(String login) {
@@ -157,4 +193,72 @@ public class WebSocketAccountManager implements AccountManager{
             return null;
         }
     }
+    
+    
+    @Override
+    public AccountPasswordRequest findRequest(String token) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<AccountPasswordRequest> cq = cb.createQuery(AccountPasswordRequest.class);
+        Root<AccountPasswordRequest> accountPassRequest = cq.from(AccountPasswordRequest.class);
+        ParameterExpression<String> tokenParameter = cb.parameter(String.class);
+        cq.select(accountPassRequest).where(cb.equal(accountPassRequest.get("token"), tokenParameter));
+        TypedQuery<AccountPasswordRequest> query = entityManager.createQuery(cq);
+        query.setParameter(tokenParameter, token);
+        try {
+            AccountPasswordRequest result = query.getSingleResult();
+            return result;
+        } catch(Exception e) {
+            return null;
+        }
+    }
+    
+    @Override
+    public boolean activateNewPassword(String email , String token){
+        AccountPasswordRequest acp = findRequest(token);
+        Account acc = acp.getAccount();
+        
+        boolean check = false;
+        
+        if(acp.getToken().equals(token)){
+            if(acc.getEmail().equals(email)){
+                acc.setPassword(acp.getNewPassword());
+                check = true;
+            }
+        }
+        return check;      
+    }
+    
+
+    @Override
+    public boolean generateAndSendPasswordChangeEmail(String email) {
+        AccountPasswordRequest req = new AccountPasswordRequest();
+        req.setAccount(findAccountByEmail(email));
+        req.setToken(getRandomToken());
+        
+        boolean status = save(req);
+        
+        if(status) {
+            mailer.send(constructPasswordChangeMail(email, req.getAccount().getNickname(), req.getToken()));     
+        }      
+        return status;       
+    }
+
+    @Override
+    public AccountPasswordRequest findRequestByEmail(String email) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<AccountPasswordRequest> cq = cb.createQuery(AccountPasswordRequest.class);
+        Root<AccountPasswordRequest> accountPassRequest = cq.from(AccountPasswordRequest.class);
+        ParameterExpression<String> emailParameter = cb.parameter(String.class);
+        cq.select(accountPassRequest).where(cb.equal(accountPassRequest.get("email"), emailParameter));
+        TypedQuery<AccountPasswordRequest> query = entityManager.createQuery(cq);
+        query.setParameter(emailParameter, email);
+        try {
+            AccountPasswordRequest result = query.getSingleResult();
+            return result;
+        } catch(Exception e) {
+            return null;
+        }
+    }
+    
+    
 }
