@@ -228,16 +228,14 @@ public class WebSocketAccountManager implements AccountManager{
     public boolean activateNewPassword(String email , String token){
         AccountPasswordRequest acp = findRequest(token);
         Account acc = acp.getAccount();
-        
-        boolean check = false;
-        
+                
         if(acp.getToken().equals(token)){
             if(acc.getEmail().equals(email)){
                 acc.setPassword(acp.getNewPassword());
-                check = true;
+                acp.setUsed(true);
             }
         }
-        return check;      
+        return acp.isUsed();
     }
     
 
@@ -253,6 +251,23 @@ public class WebSocketAccountManager implements AccountManager{
             mailer.send(constructPasswordChangeMail(email, req.getAccount().getNickname(), req.getToken()));     
         }      
         return status;       
+    }
+
+    @Override
+    public AccountPasswordRequest findRequestByAccount(Account acc) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<AccountPasswordRequest> cq = cb.createQuery(AccountPasswordRequest.class);
+        Root<AccountPasswordRequest> accountPassRequest = cq.from(AccountPasswordRequest.class);
+        ParameterExpression<Account> accParameter = cb.parameter(Account.class);
+        cq.select(accountPassRequest).where(cb.equal(accountPassRequest.get("account"), accParameter));
+        TypedQuery<AccountPasswordRequest> query = entityManager.createQuery(cq);
+        query.setParameter(accParameter, acc);
+        try {
+            AccountPasswordRequest result = query.getSingleResult();
+            return result;
+        } catch(Exception e) {
+            return null;
+        }
     }
     
     

@@ -16,7 +16,7 @@ public enum ActionParameter {
     PASSWORD("password", String.class),
     EMAIL("email", String.class),
     NICKNAME("nickname", String.class),
-    NEWPASSWORD("newpassword", String.class);
+    NEWPASSWORD("newPassword", String.class);
     
     private String name;
     private Class expectedClass;
