@@ -16,6 +16,7 @@ import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
 import java.util.function.BiConsumer;
 import com.approxteam.casino.interfaces.AccountManager;
+import org.apache.logging.log4j.LogManager;
 
 /**
  *
@@ -23,6 +24,8 @@ import com.approxteam.casino.interfaces.AccountManager;
  */
 public class AccountActivationConsumer implements BiConsumer<PlayerHandler, Action>  {
 
+    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(AccountActivationConsumer.class);
+    
     @Override
     public void accept(PlayerHandler t, Action u) {
         AccountManager bean = ContextUtils.getAccountManager();
@@ -30,9 +33,10 @@ public class AccountActivationConsumer implements BiConsumer<PlayerHandler, Acti
         
         String token = ArgUtils.getParameterString(u, ActionParameter.TOKEN);
         AccountActivation activation = bean.findActivation(token);
+        log.info("Activation for " + token + " " + activation);
         if(activation != null && activation.isActivated()) {
             response = Response.of(ResponseType.ACCOUNTACTIVATION_TOKENALREADYACTIVATED);
-        } else {
+        } else if(activation != null) {
             String actionNickName = ArgUtils.getParameterString(u, ActionParameter.NICKNAME);
             boolean activated = bean.activate(token, actionNickName);
             if(activated) {
@@ -40,7 +44,7 @@ public class AccountActivationConsumer implements BiConsumer<PlayerHandler, Acti
             } else {
                 response = Response.of(ResponseType.ACCOUNTACTIVATION_BADLOGINORTOKEN);
             }
-        }
+        } 
         SessionUtils.serializeAndSendAsynchronously(t, response);
         
         

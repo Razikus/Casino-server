@@ -190,6 +190,7 @@ public class WebSocketAccountManager implements AccountManager{
 
     @Override
     public AccountActivation findActivation(String token) {
+        log.info("Finding Activation for token: " + token);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<AccountActivation> cq = cb.createQuery(AccountActivation.class);
         Root<AccountActivation> accountActivation = cq.from(AccountActivation.class);
@@ -199,6 +200,7 @@ public class WebSocketAccountManager implements AccountManager{
         query.setParameter(tokenParameter, token);
         try {
             AccountActivation result = query.getSingleResult();
+            log.info("Found: " + result.getAccount().getNickname());
             return result;
         } catch(Exception e) {
             log.info(token + " not found - reason: " + e);
