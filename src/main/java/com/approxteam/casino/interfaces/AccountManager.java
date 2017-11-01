@@ -27,7 +27,7 @@ public interface AccountManager {
     
     public AccountActivation findActivation(String token);
     
-    public boolean generateAndSendPasswordChangeEmail(String email);
+    public boolean generateAndSendPasswordChangeEmail(String email, String newPassword);
     
     public Account findAccountByEmail(String email);
     
