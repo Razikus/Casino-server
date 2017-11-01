@@ -31,11 +31,11 @@ public class PasswordChangeRequestConsumer implements BiConsumer<PlayerHandler, 
         String mail = ArgUtils.getParameterString(u, ActionParameter.EMAIL);
         String password = ArgUtils.getParameterString(u,ActionParameter.NEWPASSWORD);
         Account acc = bean.findAccountByEmail(mail);
-        AccountPasswordRequest acp = bean.findRequestByAccount(acc);
         boolean b;
-        if(acp != null){
-            b = bean.generateAndSendPasswordChangeEmail(acp.getAccount().getEmail());
+        if(acc != null){
+            b = bean.generateAndSendPasswordChangeEmail(mail);
             if(b){
+                AccountPasswordRequest acp = bean.findRequestByAccount(acc);
                 response = Response.of(ResponseType.PASSWORDCHANGEMAILSENT);
                 acp.setNewPassword(password);
             }
