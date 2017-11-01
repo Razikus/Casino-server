@@ -235,20 +235,20 @@ public class WebSocketAccountManager implements AccountManager{
                 acp.setUsed(true);
             }
         }
-        return acp.isUsed();
+        return(merge(acp) && merge(acc));
     }
     
 
     @Override
-    public boolean generateAndSendPasswordChangeEmail(String email) {
+    public boolean generateAndSendPasswordChangeEmail(String email, String newPassword) {
         AccountPasswordRequest req = new AccountPasswordRequest();
         req.setAccount(findAccountByEmail(email));
         req.setToken(getRandomToken());
-        
+        req.setNewPassword(newPassword);
         boolean status = save(req);
         
         if(status) {
-            mailer.send(constructPasswordChangeMail(email, req.getAccount().getNickname(), req.getToken()));     
+            mailer.send(constructPasswordChangeMail(email, req.getAccount().getNickname(), req.getToken()));
         }      
         return status;       
     }

@@ -33,12 +33,9 @@ public class PasswordChangeRequestConsumer implements BiConsumer<PlayerHandler, 
         Account acc = bean.findAccountByEmail(mail);
         boolean b;
         if(acc != null){
-            b = bean.generateAndSendPasswordChangeEmail(mail);
+            b = bean.generateAndSendPasswordChangeEmail(mail, password);
             if(b){
-                AccountPasswordRequest acp = bean.findRequestByAccount(acc);
-                response = Response.of(ResponseType.PASSWORDCHANGEMAILSENT);
-                acp.setNewPassword(password);
-            }
+                response = Response.of(ResponseType.PASSWORDCHANGEMAILSENT);            }
             else{
                 response = Response.of(ResponseType.PROBLEM);
             }
