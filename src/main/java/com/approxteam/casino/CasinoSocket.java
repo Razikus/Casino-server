@@ -8,7 +8,12 @@ package com.approxteam.casino;
 import com.approxteam.casino.generalLogic.CasinoUsersHandler;
 import com.approxteam.casino.generalLogic.PlayerHandler;
 import com.approxteam.casino.generalLogic.actions.Action;
+import com.approxteam.casino.generalLogic.actions.eachConsumers.CasinoConsumer;
+import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayersState;
+import com.approxteam.casino.interfaces.CasinoManager;
 import com.approxteam.casino.interfaces.Recognizer;
+import java.io.Serializable;
+import java.util.function.Consumer;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -41,14 +46,18 @@ public class CasinoSocket {
     @EJB
     private Recognizer recognizer;
     
+    @EJB
+    private CasinoManager casinoManager;
+    
     @OnOpen
     public void open(Session session) {
-        log.info(session.getId() + " connected to casino (+)");
         sessionHandler.addSession(session);
+        log.info(session.getId() + " connected to casino (+)");
         
     }   
     @OnClose
     public void close(Session session) {
+        sessionHandler.removeSession(session);
         log.info(session.getId() + " leaving casino (-)");
     }   
 
@@ -64,13 +73,17 @@ public class CasinoSocket {
         if(action != null) {
             if(action.getType().getConsumer() != null) {
                 PlayerHandler playerHandler = sessionHandler.getPlayerBySession(session);
-                action.getType().getConsumer().consume(playerHandler, action);
+                if(action.getType().getConsumer() != null) {
+                    action.getType().getConsumer().consume(playerHandler, action);
+                }
             }
         }
     }
     
-    @Schedule(hour="*", minute="*", second = "*/30", persistent = false)
+    @Schedule(hour="*", minute="*", second = "*/10", persistent = false)
     public void refreshPlayersOnline() {
-        log.info("Not implemented yet :(");
+        final int players = sessionHandler.getPlayers().size();
+        casinoManager.doOnEach(new RefreshPlayersState(players));
+        
     }
 }

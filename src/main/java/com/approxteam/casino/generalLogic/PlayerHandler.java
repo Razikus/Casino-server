@@ -5,13 +5,14 @@
  */
 package com.approxteam.casino.generalLogic;
 
+import java.io.Serializable;
 import javax.websocket.Session;
 
 /**
  *
  * @author adamr
  */
-public class PlayerHandler {
+public class PlayerHandler implements Serializable {
             
     private PlayerState playerState;
     private Session session;
