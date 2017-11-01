@@ -116,7 +116,7 @@ public class WebSocketAccountManager implements AccountManager{
         CriteriaQuery<Account> cq = cb.createQuery(Account.class);
         Root<Account> account = cq.from(Account.class);
         ParameterExpression<String> email = cb.parameter(String.class);
-        cq.select(account).where(cb.equal(account.get("Email"), email));
+        cq.select(account).where(cb.equal(account.get("email"), email));
         TypedQuery<Account> q = entityManager.createQuery(cq);
         q.setParameter(email, mail);
         try {
