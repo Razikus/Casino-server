@@ -94,12 +94,12 @@ public class WebSocketAccountManager implements AccountManager{
         
     }
     
-    private String constructPasswordChangeLink(String token, String nickname){
-        return properties.getProperty("appLink") + "index.html?nickname=" + nickname + "&" + "token=" + token;
+    private String constructPasswordChangeLink(String token, String email){
+        return properties.getProperty("appLink") + "index.html?email=" + email + "&" + "token=" + token;
     }
     
      private MailWrapper constructPasswordChangeMail(String to, String nickName, String token) {
-        MailWrapper wrapper = new PasswordChangeMail(to, constructPasswordChangeLink(token, nickName), nickName);
+        MailWrapper wrapper = new PasswordChangeMail(to, constructPasswordChangeLink(token, to), nickName);
         return wrapper;
     }
     
