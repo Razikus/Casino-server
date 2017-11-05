@@ -26,34 +26,16 @@ public class ArgUtils {
         }
     }
     
-    public static Object getParameter(Action action, ActionParameter parameter) {
-        String value = getParameter(action, parameter.getName());
-        if(value != null) {
-            try { 
-                return parameter.getExpectedClass().cast(value);
-            } catch(ClassCastException e) {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-    
     public static Boolean getParameterBoolean(Action action, ActionParameter parameter) {
-        Object o = getParameter(action, parameter);
-        if(o != null && o.getClass().equals(Boolean.class)) {
-            return (Boolean) o;
+        String o = getParameter(action, parameter.getName());
+        if(o != null && o.getClass().equals(String.class)) {
+            return Boolean.valueOf(o);
         } else {
             return null;
         }
     }
     
      public static String getParameterString(Action action, ActionParameter parameter) {
-        Object o = getParameter(action, parameter);
-        if(o != null && o.getClass().equals(String.class)) {
-            return (String) o;
-        } else {
-            return null;
-        }
+        return getParameter(action, parameter.getName());
     }
 }
