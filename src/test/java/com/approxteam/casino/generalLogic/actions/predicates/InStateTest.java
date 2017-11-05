@@ -64,7 +64,7 @@ public class InStateTest {
         PlayerHandler player3 = new PlayerHandler(session);
         player3.switchState(PlayerState.PAYING);
         result = instance.test(player3, action);
-        expResult = false;
+        expResult = true;
         assertEquals(expResult, result);
         
     }
