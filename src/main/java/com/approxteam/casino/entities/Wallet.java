@@ -6,10 +6,15 @@
 package com.approxteam.casino.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -23,6 +28,10 @@ public class Wallet implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
+    private List<WalletLog> walletLogs = new ArrayList<>();
+    
+    @Column(nullable = false)
     private Double balance = 0.0;
 
     
@@ -42,6 +51,22 @@ public class Wallet implements Serializable {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+
+    public List<WalletLog> getWalletLogs() {
+        if(walletLogs == null) {
+            return new ArrayList<>();
+        }
+        return walletLogs;
+    }
+
+    public void setWalletLogs(List<WalletLog> walletLogs) {
+        if(walletLogs == null) {
+            this.walletLogs = new ArrayList<>();
+        } else {
+            this.walletLogs = walletLogs;
+        }
+    }
+    
     
     
 
