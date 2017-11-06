@@ -28,7 +28,7 @@ public class Wallet implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "wallet", fetch = FetchType.LAZY)
     private List<WalletLog> walletLogs = new ArrayList<>();
     
     @Column(nullable = false)
