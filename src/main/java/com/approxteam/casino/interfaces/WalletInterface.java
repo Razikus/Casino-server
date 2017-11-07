@@ -7,11 +7,13 @@ package com.approxteam.casino.interfaces;
 
 import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.Wallet;
+import javax.ejb.Local;
 
 /**
  *
  * @author rafal
  */
+@Local
 public interface WalletInterface {
     boolean increaseWalletBy(Wallet wallet, double increase, String reason);
     
