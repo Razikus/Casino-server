@@ -27,7 +27,7 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class WebSocketWalletInterface implements WalletInterface {
     @EJB
-    private AccountManager am;      
+    private AccountManager accountManager;      
     
     @PersistenceContext(unitName = "casinoPU")
     private EntityManager entityManager;
@@ -35,31 +35,31 @@ public class WebSocketWalletInterface implements WalletInterface {
     
     @Override
     public boolean increaseWalletBy(Wallet wallet, double increase, String reason) {
-        boolean b = false;
-        WalletLog wl = makeWalletIncrLog(wallet,increase,reason);
+        boolean check = false;
+        WalletLog walletLog = makeWalletIncrLog(wallet,increase,reason);
         wallet.setBalance(wallet.getBalance() + increase);
-        b = save(wallet);
-        if(b){
-            b = save(wl);
+        check = save(wallet);
+        if(check){
+            check = save(walletLog);
         }
-        return b;  
+        return check;  
         
     }
 
     @Override
     public boolean decreaseWalletBy(Wallet wallet, double decrease, String reason) {
-        boolean b = false;
-        WalletLog wl = makeWalletDecrLog(wallet,decrease,reason);
-        if(wl.getBalanceAfter() < 0){
+        boolean check = false;
+        WalletLog walletLog = makeWalletDecrLog(wallet,decrease,reason);
+        if(walletLog.getBalanceAfter() < 0){
             return false;
         }
         wallet.setBalance(wallet.getBalance() - decrease);
-        b = save(wallet);
-        if(b){
-            wl.setBalanceAfter(wallet.getBalance());
-            b = save(wl);
+        check = save(wallet);
+        if(check){
+            walletLog.setBalanceAfter(wallet.getBalance());
+            check = save(walletLog);
         }
-        return b;        
+        return check;        
     }
 
     @Override
@@ -75,9 +75,9 @@ public class WebSocketWalletInterface implements WalletInterface {
 
     @Override
     public boolean increaseAccountWalletBy(String login, Wallet wallet, double increase, String reason) {
-        Account acc =  am.findAccount(login);
-        if(acc != null){
-            return increaseAccountWalletBy(acc,wallet,increase,reason);
+        Account account =  accountManager.findAccount(login);
+        if(account != null){
+            return increaseAccountWalletBy(account,wallet,increase,reason);
         }
         else{
             return false;
@@ -97,9 +97,9 @@ public class WebSocketWalletInterface implements WalletInterface {
 
     @Override
     public boolean decreaseAccountWalletBy(String login, Wallet wallet, double decrease, String reason) {
-        Account acc =  am.findAccount(login);
-        if(acc != null){
-            return decreaseAccountWalletBy(acc,wallet,decrease,reason);
+        Account account =  accountManager.findAccount(login);
+        if(account != null){
+            return decreaseAccountWalletBy(account,wallet,decrease,reason);
         }
         else{
             return false;
@@ -117,21 +117,21 @@ public class WebSocketWalletInterface implements WalletInterface {
     }
     
     private WalletLog makeWalletIncrLog(Wallet w, Double ammount, String reason){
-        WalletLog wl = new WalletLog();
-        wl.setWallet(w);
-        wl.setBalanceBefore(w.getBalance());
-        wl.setBalanceAfter(w.getBalance() + ammount);
-        wl.setReason(reason);
-        return wl;
+        WalletLog walletLog = new WalletLog();
+        walletLog.setWallet(w);
+        walletLog.setBalanceBefore(w.getBalance());
+        walletLog.setBalanceAfter(w.getBalance() + ammount);
+        walletLog.setReason(reason);
+        return walletLog;
     }
     
     private WalletLog makeWalletDecrLog(Wallet w, Double ammount, String reason){
-        WalletLog wl = new WalletLog();
-        wl.setWallet(w);
-        wl.setBalanceBefore(w.getBalance());
-        wl.setBalanceAfter(w.getBalance() - ammount);
-        wl.setReason(reason);
-        return wl;
+        WalletLog walletLog = new WalletLog();
+        walletLog.setWallet(w);
+        walletLog.setBalanceBefore(w.getBalance());
+        walletLog.setBalanceAfter(w.getBalance() - ammount);
+        walletLog.setReason(reason);
+        return walletLog;
     }
     
 }
