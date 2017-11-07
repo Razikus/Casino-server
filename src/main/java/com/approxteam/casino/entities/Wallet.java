@@ -51,6 +51,7 @@ public class Wallet implements Serializable {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+    
 
     public List<WalletLog> getWalletLogs() {
         if(walletLogs == null) {
