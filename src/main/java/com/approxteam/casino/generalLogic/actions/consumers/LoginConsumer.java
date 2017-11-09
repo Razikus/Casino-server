@@ -32,6 +32,7 @@ public class LoginConsumer implements BiConsumer<PlayerHandler, Action> {
         Account player = bean.findAccount(login);
         Response response = getProperlyResponse(player, ArgUtils.getParameterString(u, ActionParameter.PASSWORD));
         if(response.getType().equals(ResponseType.LOGINOK)) {
+            t.setNickname(player.getNickname());
             t.switchState(PlayerState.CHOOSING);
         }
         SessionUtils.serializeAndSendAsynchronously(t, response);
