@@ -9,18 +9,20 @@ import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.Wallet;
 import com.approxteam.casino.entities.WalletLog;
 import com.approxteam.casino.interfaces.AccountManager;
+import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.WalletInterface;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.apache.logging.log4j.LogManager;
 
 /**
  *
  * @author rafal
  */
 @Stateless
-public class WebSocketWalletInterface implements WalletInterface {
+public class WebSocketWalletInterface extends BasicBean implements WalletInterface {
     @EJB
     private AccountManager accountManager;      
     
@@ -99,16 +101,6 @@ public class WebSocketWalletInterface implements WalletInterface {
         else{
             return false;
         }
-    }
-
-    private boolean save(Object o) {
-        try {
-            entityManager.persist(o);
-            entityManager.flush();
-        } catch(Exception e) {
-            return false;
-        }
-        return true;
     }
     
     private WalletLog makeWalletIncrLog(Wallet w, Double ammount, String reason){

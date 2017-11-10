@@ -10,9 +10,6 @@ import com.approxteam.casino.configuration.PropertyComment;
 import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.AccountActivation;
 import com.approxteam.casino.entities.AccountPasswordRequest;
-import com.approxteam.casino.generalLogic.actions.Action;
-import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
-import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
 import com.approxteam.casino.interfaces.Mailer;
 import com.approxteam.casino.interfaces.mailer.ActivationMail;
 import com.approxteam.casino.interfaces.mailer.MailWrapper;
@@ -30,6 +27,7 @@ import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import com.approxteam.casino.interfaces.AccountManager;
+import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.mailer.PasswordChangeMail;
 
 /**
@@ -38,7 +36,7 @@ import com.approxteam.casino.interfaces.mailer.PasswordChangeMail;
  */
 @Stateful
 @PropertyComment(desc = "Provide default link")
-public class WebSocketAccountManager implements AccountManager{
+public class WebSocketAccountManager extends BasicBean implements AccountManager{
 
     private final Properties properties = PropertiesBuilder.getProperties(WebSocketAccountManager.class);
     
@@ -143,26 +141,6 @@ public class WebSocketAccountManager implements AccountManager{
         } catch(Exception e) {
             return null;
         }
-    }
-    
-    private boolean save(Object o) {
-        try {
-            entityManager.persist(o);
-            entityManager.flush();
-        } catch(Exception e) {
-            return false;
-        }
-        return true;
-    }
-    
-    private boolean merge(Object o) {
-        try {
-            entityManager.merge(o);
-            entityManager.flush();
-        } catch(Exception e) {
-            return false;
-        }
-        return true;
     }
 
     @Override

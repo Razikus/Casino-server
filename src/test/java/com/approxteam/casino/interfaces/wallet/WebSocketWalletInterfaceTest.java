@@ -5,19 +5,39 @@
  */
 package com.approxteam.casino.interfaces.wallet;
 
+import com.approxteam.casino.configuration.PropertiesBuilder;
+import com.approxteam.casino.configuration.PropertyComment;
 import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.AccountActivation;
 import com.approxteam.casino.entities.AccountPasswordRequest;
 import com.approxteam.casino.entities.Wallet;
 import com.approxteam.casino.entities.WalletLog;
+import com.approxteam.casino.generalLogic.ContextUtils;
+import com.approxteam.casino.interfaces.AccountManager;
+import com.approxteam.casino.interfaces.BasicBean;
+import com.approxteam.casino.interfaces.Mailer;
 import com.approxteam.casino.interfaces.WalletInterface;
+import com.approxteam.casino.interfaces.mailer.ActivationMail;
+import com.approxteam.casino.interfaces.mailer.MailWrapper;
+import com.approxteam.casino.interfaces.mailer.PasswordChangeMail;
+import com.approxteam.casino.interfaces.mailer.WebSocketMailer;
+import com.approxteam.casino.interfaces.register.WebSocketAccountManager;
+import java.io.File;
+import javax.ejb.EJB;
 import javax.ejb.embeddable.EJBContainer;
+import javax.inject.Inject;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.math.RandomUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import static org.jboss.shrinkwrap.resolver.api.maven.PackagingType.EJB;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -54,137 +74,71 @@ public class WebSocketWalletInterfaceTest {
     
     @Deployment
     public static Archive deploy(){
-        return ShrinkWrap.create(WebArchive.class, "test.war")
+        File[] files = Maven.resolver().loadPomFromFile("pom.xml").importRuntimeDependencies().resolve().withTransitivity().asFile();
+        return ShrinkWrap.create(WebArchive.class, "WebSocketWalletInterfacesTests.war")
                 .addPackage(Wallet.class.getPackage())
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
+                .addClass(WebSocketWalletInterface.class)
+                .addClass(WalletInterface.class)
+                .addClass(AccountManager.class)
+                .addClass(WebSocketAccountManager.class)
+                .addClass(Mailer.class)
+                .addClass(WebSocketMailer.class)
+                .addClass(MailWrapper.class)
+                .addClass(ActivationMail.class)
+                .addClass(PasswordChangeMail.class)
+                .addClass(ContextUtils.class)
+                .addClass(PropertiesBuilder.class)
+                .addClass(PropertyComment.class)
+                .addClass(BasicBean.class)
+                .addAsLibraries(files)
                 .addAsWebInfResource("wildfly-ds.xml")
+                .addAsResource("log4j2.xml", ArchivePaths.create("log4j2.xml"))
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
+    
+    @EJB
+    WalletInterface wallet;
+    
+    @EJB
+    AccountManager accountManager;
 
     @Test
-    public void emptyInContainerTest(){
-        System.out.println("=========================================");
-        System.out.println("This test should run inside the container");
-        System.out.println("=========================================");
+    public void zeroBalanceWalletAfterRegister(){
+        String nick = RandomStringUtils.randomAlphabetic(7);
+        accountManager.register(nick, RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
+        Account acc = accountManager.findAccount(nick);
+        assertTrue(0.0 == acc.getWallet().getBalance());
     }
     
-
-//    /**
-//     * Test of increaseWalletBy method, of class WebSocketWalletInterface.
-//     */
-//    @Test
-//    public void testIncreaseWalletBy() throws Exception {
-//        System.out.println("increaseWalletBy");
-//        Wallet wallet = null;
-//        double increase = 0.0;
-//        String reason = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        WalletInterface instance = (WalletInterface)container.getContext().lookup("java:global/classes/WebSocketWalletInterface");
-//        boolean expResult = false;
-//        boolean result = instance.increaseWalletBy(wallet, increase, reason);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of decreaseWalletBy method, of class WebSocketWalletInterface.
-//     */
-//    @Test
-//    public void testDecreaseWalletBy() throws Exception {
-//        System.out.println("decreaseWalletBy");
-//        Wallet wallet = null;
-//        double decrease = 0.0;
-//        String reason = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        WalletInterface instance = (WalletInterface)container.getContext().lookup("java:global/classes/WebSocketWalletInterface");
-//        boolean expResult = false;
-//        boolean result = instance.decreaseWalletBy(wallet, decrease, reason);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of increaseAccountWalletBy method, of class WebSocketWalletInterface.
-//     */
-//    @Test
-//    public void testIncreaseAccountWalletBy_4args_1() throws Exception {
-//        System.out.println("increaseAccountWalletBy");
-//        Account account = null;
-//        Wallet wallet = null;
-//        double increase = 0.0;
-//        String reason = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        WalletInterface instance = (WalletInterface)container.getContext().lookup("java:global/classes/WebSocketWalletInterface");
-//        boolean expResult = false;
-//        boolean result = instance.increaseAccountWalletBy(account, wallet, increase, reason);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of increaseAccountWalletBy method, of class WebSocketWalletInterface.
-//     */
-//    @Test
-//    public void testIncreaseAccountWalletBy_4args_2() throws Exception {
-//        System.out.println("increaseAccountWalletBy");
-//        String login = "";
-//        Wallet wallet = null;
-//        double increase = 0.0;
-//        String reason = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        WalletInterface instance = (WalletInterface)container.getContext().lookup("java:global/classes/WebSocketWalletInterface");
-//        boolean expResult = false;
-//        boolean result = instance.increaseAccountWalletBy(login, wallet, increase, reason);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of decreaseAccountWalletBy method, of class WebSocketWalletInterface.
-//     */
-//    @Test
-//    public void testDecreaseAccountWalletBy_4args_1() throws Exception {
-//        System.out.println("decreaseAccountWalletBy");
-//        Account account = null;
-//        Wallet wallet = null;
-//        double decrease = 0.0;
-//        String reason = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        WalletInterface instance = (WalletInterface)container.getContext().lookup("java:global/classes/WebSocketWalletInterface");
-//        boolean expResult = false;
-//        boolean result = instance.decreaseAccountWalletBy(account, wallet, decrease, reason);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of decreaseAccountWalletBy method, of class WebSocketWalletInterface.
-//     */
-//    @Test
-//    public void testDecreaseAccountWalletBy_4args_2() throws Exception {
-//        System.out.println("decreaseAccountWalletBy");
-//        String login = "";
-//        Wallet wallet = null;
-//        double decrease = 0.0;
-//        String reason = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        WalletInterface instance = (WalletInterface)container.getContext().lookup("java:global/classes/WebSocketWalletInterface");
-//        boolean expResult = false;
-//        boolean result = instance.decreaseAccountWalletBy(login, wallet, decrease, reason);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    @Test
+    public void increaseWalletTest(){
+        String nick = RandomStringUtils.randomAlphabetic(7);
+        accountManager.register(nick, RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
+        Account acc = accountManager.findAccount(nick);
+        Double balance = acc.getWallet().getBalance();
+        Double increase = RandomUtils.nextDouble() * RandomUtils.nextInt(1000);
+        assertTrue(increase > 0);
+        assertTrue(wallet.increaseWalletBy(acc.getWallet(), increase, "TEST"));
+        acc = accountManager.findAccount(nick);
+        assertTrue((balance + increase) == acc.getWallet().getBalance());
+    }
+    
+    @Test
+    public void decreaseWalletTest(){
+        String nick = RandomStringUtils.randomAlphabetic(7);
+        accountManager.register(nick, RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
+        Account acc = accountManager.findAccount(nick);
+        Double balance = acc.getWallet().getBalance();
+        Double increase = RandomUtils.nextDouble() * RandomUtils.nextInt(1000);
+        assertTrue(increase > 0);
+        assertTrue(wallet.increaseWalletBy(acc.getWallet(), increase, "TEST"));
+        acc = accountManager.findAccount(nick);
+        assertTrue((balance + increase) == acc.getWallet().getBalance());
+        assertTrue(wallet.decreaseWalletBy(acc.getWallet(), increase, "TEST"));
+        acc = accountManager.findAccount(nick);
+        assertTrue(balance.equals(acc.getWallet().getBalance()));
+    }
+    
     
 }
