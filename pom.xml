@@ -6,12 +6,12 @@
     <artifactId>casinoserver</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
-
     <name>casinoserver</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jboss.home>C:\Users\Adam.DESKTOP-SHQ7UMK\casino-tools\wildfly11</jboss.home>
     </properties>
     
     <dependencies>
@@ -73,6 +73,22 @@
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
             <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-bom</artifactId>
+            <version>1.1.11.Final</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <version>1.1.13.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.arquillian</groupId>
+            <artifactId>wildfly-arquillian-container-embedded</artifactId>
+            <version>2.1.0.Final</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
@@ -145,6 +161,23 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>java.util.logging.manager</name>
+                            <value>org.jboss.logmanager.LogManager</value>
+                        </property>
+                    </systemProperties>
+                    <forkMode>always</forkMode>
+                    <systemPropertyVariables>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <jboss.home>${jboss.home}</jboss.home>
+                        <module.path>${jboss.home}/modules</module.path>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
         </plugins>
     </build>
