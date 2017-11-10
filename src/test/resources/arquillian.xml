@@ -4,6 +4,10 @@
 
     <container qualifier="wildfly" default="true">
         <configuration>
+            <property name="managementAddress">127.0.0.1</property>
+            <property name="managementPort">9990</property>
+            <property name="username">casino</property>
+            <property name="password">casino</property>
         </configuration>
     </container>
     
