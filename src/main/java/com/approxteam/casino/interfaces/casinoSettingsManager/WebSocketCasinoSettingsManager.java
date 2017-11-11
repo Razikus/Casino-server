@@ -35,6 +35,8 @@ public class WebSocketCasinoSettingsManager extends BasicBean implements CasinoS
     
     private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(WebSocketCasinoSettingsManager.class);
     
+    private static final Class[] classesToString = new Class[] {String.class, Double.class, Byte.class, Integer.class, Boolean.class, Float.class};
+    
     @Override
     public Optional<CasinoSetting> getSettingFor(String name) {
         if(name == null || name.length() <= 0) {
@@ -53,6 +55,21 @@ public class WebSocketCasinoSettingsManager extends BasicBean implements CasinoS
             return false;
         }
         Optional<CasinoSetting> setting = getSettingFor(name);
+        
+        for (Class class1 : classesToString) {
+            if(value.getClass().equals(class1)) {
+                if(setting.isPresent()) {
+                    setting.get().setStringValue(value.toString());
+                    return merge(setting.get());
+                } else {
+                    CasinoSetting newSetting = new CasinoSetting();
+                    newSetting.setName(name);
+                    newSetting.setStringValue(value.toString());
+                    return save(newSetting);
+                }
+            }
+        }
+        
         if(setting.isPresent()) {
             setting.get().setStringValue(serializeToString(value));
             return merge(setting.get());
@@ -109,27 +126,47 @@ public class WebSocketCasinoSettingsManager extends BasicBean implements CasinoS
     
     @Override
     public Optional<String> getStringSettingFor(String name) {
-        return getObjectSettingFor(name);
+        Optional<CasinoSetting> setting = getSettingFor(name);
+        if(setting.isPresent()) {
+            return Optional.of(setting.get().getStringValue());
+        }
+        return Optional.empty();
     }
 
     @Override
     public Optional<Boolean> getBooleanSettingFor(String name) {
-        return getObjectSettingFor(name);
+        Optional<String> stringSetting = getStringSettingFor(name);
+        if(stringSetting.isPresent()) {
+            return Optional.of(Boolean.valueOf(stringSetting.get()));
+        }
+        return Optional.empty();
     }
 
     @Override
     public Optional<Double> getDoubleSettingFor(String name) {
-        return getObjectSettingFor(name);
+        Optional<String> stringSetting = getStringSettingFor(name);
+        if(stringSetting.isPresent()) {
+            return Optional.of(Double.valueOf(stringSetting.get()));
+        }
+        return Optional.empty();
     }
 
     @Override
     public Optional<Float> getFloatSettingFor(String name) {
-        return getObjectSettingFor(name);
+        Optional<String> stringSetting = getStringSettingFor(name);
+        if(stringSetting.isPresent()) {
+            return Optional.of(Float.valueOf(stringSetting.get()));
+        }
+        return Optional.empty();
     }
 
     @Override
     public Optional<Integer> getIntegerSettingFor(String name) {
-        return getObjectSettingFor(name);
+        Optional<String> stringSetting = getStringSettingFor(name);
+        if(stringSetting.isPresent()) {
+            return Optional.of(Integer.valueOf(stringSetting.get()));
+        }
+        return Optional.empty();
     }
     
     private CasinoSetting getSettingFromDatabase(String settingName) {

@@ -46,6 +46,7 @@ public class CasinoSocket {
     @EJB
     private CasinoManager casinoManager;
     
+    
     @OnOpen
     public void open(Session session) {
         sessionHandler.addSession(session);

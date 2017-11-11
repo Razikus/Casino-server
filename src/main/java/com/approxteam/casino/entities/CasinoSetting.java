@@ -36,7 +36,7 @@ public class CasinoSetting implements Serializable {
     @Column(unique = true, nullable = false)
     private String name;
     
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2000)
     private String stringValue;
 
     public String getName() {

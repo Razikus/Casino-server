@@ -10,6 +10,7 @@ import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import java.io.File;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Optional;
 import javax.ejb.EJB;
 import org.apache.commons.lang.RandomStringUtils;
@@ -65,6 +66,7 @@ public class WebSocketCasinoSettingsManagerTest {
                 .addClass(CasinoSettingsManager.class)
                 .addClass(WebSocketCasinoSettingsManager.class)
                 .addClass(BasicBean.class)
+                .addClass(SerializationTest.class)
                 .addAsLibraries(files)
                 .addAsWebInfResource("wildfly-ds.xml")
                 .addAsResource("log4j2.xml", ArchivePaths.create("log4j2.xml"))
@@ -227,6 +229,58 @@ public class WebSocketCasinoSettingsManagerTest {
         Optional<Integer> fromDatabase = settingsManager.getIntegerSettingFor(name);
         assertTrue(fromDatabase.isPresent());
         assertEquals(fromDatabase.get(), value);
+    }
+    
+    @Test
+    public void testGetObjectSettingFor() {
+        String name = RandomStringUtils.randomAlphabetic(10);
+        SerializationTest value = new SerializationTest(RandomStringUtils.randomAlphabetic(10), RandomUtils.nextInt(1000));
+        boolean expResult = true;
+        boolean result = settingsManager.setSettingFor(name, value);
+        assertEquals(expResult, result);
+        Optional<SerializationTest> fromDatabase = settingsManager.getObjectSettingFor(name);
+        assertTrue(fromDatabase.isPresent());
+        assertEquals(fromDatabase.get(), value);
+    }
+    
+}
+
+class SerializationTest implements Serializable {
+    private String name1;
+    private Integer something;
+
+    public SerializationTest(String name1, Integer something) {
+        this.name1 = name1;
+        this.something = something;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.name1);
+        hash = 59 * hash + Objects.hashCode(this.something);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SerializationTest other = (SerializationTest) obj;
+        if (!Objects.equals(this.name1, other.name1)) {
+            return false;
+        }
+        if (!Objects.equals(this.something, other.something)) {
+            return false;
+        }
+        return true;
     }
     
 }
