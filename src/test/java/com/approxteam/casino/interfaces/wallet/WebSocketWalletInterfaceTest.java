@@ -8,10 +8,7 @@ package com.approxteam.casino.interfaces.wallet;
 import com.approxteam.casino.configuration.PropertiesBuilder;
 import com.approxteam.casino.configuration.PropertyComment;
 import com.approxteam.casino.entities.Account;
-import com.approxteam.casino.entities.AccountActivation;
-import com.approxteam.casino.entities.AccountPasswordRequest;
 import com.approxteam.casino.entities.Wallet;
-import com.approxteam.casino.entities.WalletLog;
 import com.approxteam.casino.generalLogic.ContextUtils;
 import com.approxteam.casino.interfaces.AccountManager;
 import com.approxteam.casino.interfaces.BasicBean;
@@ -24,8 +21,6 @@ import com.approxteam.casino.interfaces.mailer.WebSocketMailer;
 import com.approxteam.casino.interfaces.register.WebSocketAccountManager;
 import java.io.File;
 import javax.ejb.EJB;
-import javax.ejb.embeddable.EJBContainer;
-import javax.inject.Inject;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -34,10 +29,8 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import static org.jboss.shrinkwrap.resolver.api.maven.PackagingType.EJB;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -117,7 +110,7 @@ public class WebSocketWalletInterfaceTest {
         accountManager.register(nick, RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
         Account acc = accountManager.findAccount(nick);
         Double balance = acc.getWallet().getBalance();
-        Double increase = RandomUtils.nextDouble() * RandomUtils.nextInt(1000);
+        Double increase = RandomUtils.nextDouble() * (RandomUtils.nextInt(1000) + 1);
         assertTrue(increase > 0);
         assertTrue(wallet.increaseWalletBy(acc.getWallet(), increase, "TEST"));
         acc = accountManager.findAccount(nick);
@@ -130,7 +123,7 @@ public class WebSocketWalletInterfaceTest {
         accountManager.register(nick, RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
         Account acc = accountManager.findAccount(nick);
         Double balance = acc.getWallet().getBalance();
-        Double increase = RandomUtils.nextDouble() * RandomUtils.nextInt(1000);
+        Double increase = RandomUtils.nextDouble() * (RandomUtils.nextInt(1000) + 1);
         assertTrue(increase > 0);
         assertTrue(wallet.increaseWalletBy(acc.getWallet(), increase, "TEST"));
         acc = accountManager.findAccount(nick);
@@ -139,6 +132,65 @@ public class WebSocketWalletInterfaceTest {
         acc = accountManager.findAccount(nick);
         assertTrue(balance.equals(acc.getWallet().getBalance()));
     }
+    
+    @Test
+    public void increaseAccountWallet_login_Test(){
+        String nick = RandomStringUtils.randomAlphabetic(7);
+        accountManager.register(nick, RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
+        Account acc = accountManager.findAccount(nick);
+        Double balance = acc.getWallet().getBalance();
+        Double increase = RandomUtils.nextDouble() * (RandomUtils.nextInt(1000) + 1);
+        assertTrue(increase > 0);
+        assertTrue(wallet.increaseAccountWalletBy(nick, increase, "TEST"));
+        
+        acc = accountManager.findAccount(nick);
+        assertTrue((balance + increase) == acc.getWallet().getBalance());
+    }
+    @Test
+    public void increaseAccountWallet_account_Test(){
+        String nick = RandomStringUtils.randomAlphabetic(7);
+        accountManager.register(nick, RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
+        Account acc = accountManager.findAccount(nick);
+        Double balance = acc.getWallet().getBalance();
+        Double increase = RandomUtils.nextDouble() * (RandomUtils.nextInt(1000) + 1);
+        assertTrue(increase > 0);
+        assertTrue(wallet.increaseAccountWalletBy(acc, increase, "TEST"));
+        
+        acc = accountManager.findAccount(nick);
+        assertTrue((balance + increase) == acc.getWallet().getBalance());
+    }
+    
+    @Test
+    public void decreaseAccountWallet_login_Test(){
+        String nick = RandomStringUtils.randomAlphabetic(7);
+        accountManager.register(nick, RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
+        Account acc = accountManager.findAccount(nick);
+        Double balance = acc.getWallet().getBalance();
+        Double increase = RandomUtils.nextDouble() * (RandomUtils.nextInt(1000) + 1);
+        assertTrue(increase > 0);
+        assertTrue(wallet.increaseWalletBy(acc.getWallet(), increase, "TEST"));
+        acc = accountManager.findAccount(nick);
+        assertTrue((balance + increase) == acc.getWallet().getBalance());
+        assertTrue(wallet.decreaseAccountWalletBy(nick, increase, "TEST"));
+        acc = accountManager.findAccount(nick);
+        assertTrue(balance.equals(acc.getWallet().getBalance()));
+    }
+    @Test
+    public void decreaseAccountWallet_account_Test(){
+        String nick = RandomStringUtils.randomAlphabetic(7);
+        accountManager.register(nick, RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
+        Account acc = accountManager.findAccount(nick);
+        Double balance = acc.getWallet().getBalance();
+        Double increase = RandomUtils.nextDouble() * (RandomUtils.nextInt(1000) + 1);
+        assertTrue(increase > 0);
+        assertTrue(wallet.increaseWalletBy(acc.getWallet(), increase, "TEST"));
+        acc = accountManager.findAccount(nick);
+        assertTrue((balance + increase) == acc.getWallet().getBalance());
+        assertTrue(wallet.decreaseAccountWalletBy(acc, increase, "TEST"));
+        acc = accountManager.findAccount(nick);
+        assertTrue(balance.equals(acc.getWallet().getBalance()));
+    }
+    
     
     
 }
