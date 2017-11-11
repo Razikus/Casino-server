@@ -35,9 +35,9 @@ public class WebSocketWalletInterface extends BasicBean implements WalletInterfa
         boolean check = false;
         WalletLog walletLog = makeWalletIncrLog(wallet,increase,reason);
         wallet.setBalance(wallet.getBalance() + increase);
-        check = save(wallet);
+        check = merge(wallet);
         if(check){
-            check = save(walletLog);
+            check = merge(walletLog);
         }
         return check;  
         
@@ -51,10 +51,10 @@ public class WebSocketWalletInterface extends BasicBean implements WalletInterfa
             return false;
         }
         wallet.setBalance(wallet.getBalance() - decrease);
-        check = save(wallet);
+        check = merge(wallet);
         if(check){
             walletLog.setBalanceAfter(wallet.getBalance());
-            check = save(walletLog);
+            check = merge(walletLog);
         }
         return check;        
     }
