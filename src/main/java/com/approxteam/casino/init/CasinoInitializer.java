@@ -24,8 +24,8 @@ public class CasinoInitializer {
     
     @PostConstruct
     void init() {
-        DefaultCasinoSetting[] defaultSettings = DefaultCasinoSetting.values();
-        for (DefaultCasinoSetting defaultSetting : defaultSettings) {
+        PredefinedCasinoSetting[] defaultSettings = PredefinedCasinoSetting.values();
+        for (PredefinedCasinoSetting defaultSetting : defaultSettings) {
             String settingName = defaultSetting.getSettingName();
             if(!settingsManager.getSettingFor(settingName).isPresent()) {
                 settingsManager.setSettingFor(settingName, defaultSetting.getValue());

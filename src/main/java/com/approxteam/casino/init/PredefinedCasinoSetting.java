@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  * @author Adam
  */
-public enum DefaultCasinoSetting {
+public enum PredefinedCasinoSetting {
 
     GUNNER_WINRATE(0.33);
 
@@ -19,13 +19,13 @@ public enum DefaultCasinoSetting {
     private Serializable value;
     private Class valueClass;
         
-    private DefaultCasinoSetting(String settingName, Serializable value) {
+    private PredefinedCasinoSetting(String settingName, Serializable value) {
         this.settingName = settingName;
         this.value = value;
         this.valueClass = value.getClass();
     }
     
-    private DefaultCasinoSetting(Serializable value) {
+    private PredefinedCasinoSetting(Serializable value) {
         this.settingName = this.name();
         this.value = value;
         this.valueClass = value.getClass();
