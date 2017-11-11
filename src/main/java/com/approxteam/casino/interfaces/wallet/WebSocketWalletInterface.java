@@ -60,8 +60,8 @@ public class WebSocketWalletInterface extends BasicBean implements WalletInterfa
     }
 
     @Override
-    public boolean increaseAccountWalletBy(Account account, Wallet wallet, double increase, String reason) {
-        wallet = account.getWallet();
+    public boolean increaseAccountWalletBy(Account account, double increase, String reason) {
+        Wallet wallet = account.getWallet();
         if(wallet != null){
             return increaseWalletBy(wallet,increase,reason);
         }
@@ -71,10 +71,10 @@ public class WebSocketWalletInterface extends BasicBean implements WalletInterfa
     }
 
     @Override
-    public boolean increaseAccountWalletBy(String login, Wallet wallet, double increase, String reason) {
+    public boolean increaseAccountWalletBy(String login, double increase, String reason) {
         Account account =  accountManager.findAccount(login);
         if(account != null){
-            return increaseAccountWalletBy(account,wallet,increase,reason);
+            return increaseAccountWalletBy(account,increase,reason);
         }
         else{
             return false;
@@ -82,8 +82,8 @@ public class WebSocketWalletInterface extends BasicBean implements WalletInterfa
     }
 
     @Override
-    public boolean decreaseAccountWalletBy(Account account, Wallet wallet, double decrease, String reason) {
-        wallet = account.getWallet();
+    public boolean decreaseAccountWalletBy(Account account, double decrease, String reason) {
+        Wallet wallet = account.getWallet();
         if(wallet != null){
             return decreaseWalletBy(wallet,decrease,reason);
         }
@@ -93,10 +93,10 @@ public class WebSocketWalletInterface extends BasicBean implements WalletInterfa
     }
 
     @Override
-    public boolean decreaseAccountWalletBy(String login, Wallet wallet, double decrease, String reason) {
+    public boolean decreaseAccountWalletBy(String login, double decrease, String reason) {
         Account account =  accountManager.findAccount(login);
         if(account != null){
-            return decreaseAccountWalletBy(account,wallet,decrease,reason);
+            return decreaseAccountWalletBy(account,decrease,reason);
         }
         else{
             return false;

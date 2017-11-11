@@ -19,12 +19,12 @@ public interface WalletInterface {
     
     boolean decreaseWalletBy(Wallet wallet, double decrease, String reason);
 
-    boolean increaseAccountWalletBy(Account account, Wallet wallet, double increase, String reason);
+    boolean increaseAccountWalletBy(Account account, double increase, String reason);
     
-    boolean increaseAccountWalletBy(String login, Wallet wallet, double increase, String reason);
+    boolean increaseAccountWalletBy(String login, double increase, String reason);
 
-    boolean decreaseAccountWalletBy(Account account, Wallet wallet, double decrease, String reason);
+    boolean decreaseAccountWalletBy(Account account, double decrease, String reason);
     
-    boolean decreaseAccountWalletBy(String login, Wallet wallet, double decrease, String reason);
+    boolean decreaseAccountWalletBy(String login, double decrease, String reason);
     
 }
