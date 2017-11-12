@@ -6,6 +6,7 @@
 package com.approxteam.casino.interfaces.randomManager;
 
 import com.approxteam.casino.entities.CasinoSetting;
+import com.approxteam.casino.exceptions.SettingNotFoundException;
 import com.approxteam.casino.init.PredefinedCasinoSetting;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
@@ -70,6 +71,7 @@ public class WebSocketRandomManagerTest {
                 .addClass(WebSocketCasinoSettingsManager.class)
                 .addClass(PredefinedCasinoSetting.class)
                 .addClass(BasicBean.class)
+                .addClass(SettingNotFoundException.class)
                 .addAsLibraries(files)
                 .addAsWebInfResource("wildfly-ds.xml")
                 .addAsResource("log4j2.xml", ArchivePaths.create("log4j2.xml"))
