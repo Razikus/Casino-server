@@ -19,4 +19,5 @@ import java.lang.annotation.Target;
 public @interface PropertyComment {
     String desc() default "";
     String place() default "./casino/";
+    String[] defaultConf() default "";
 }

@@ -43,6 +43,8 @@ public class PropertiesBuilder {
         OutputStream out = null;
         try {
             PropertyComment annotation = ((PropertyComment)forClass.getAnnotationsByType(PropertyComment.class)[0]);
+            String[] defaultConf = annotation.defaultConf();
+            splitAndPutDefaultProperties(defaultConf, properties);
             String place = annotation.place();
             String path = place + getClassPropertiesPath(forClass);
             conditionalCreateFolder(place);
@@ -61,7 +63,23 @@ public class PropertiesBuilder {
                 log.error("Unexpected error with property builder");
             }
         }
-
+    }
+    
+    private static void splitAndPutDefaultProperties(String[] defaultProperties, Properties properties) {
+        if(defaultProperties == null || defaultProperties.length <= 0)
+        {
+            return;
+        }
+        
+        for (String defaultProperty : defaultProperties) {
+            String[] splitted = defaultProperty.split("=", 2);
+            if(!properties.contains(splitted[0])) {
+                if(splitted.length == 2) {
+                    System.out.println(splitted[1]);
+                    properties.put(splitted[0], splitted[1]);
+                }
+            }
+        }
     }
     
     private static void conditionalCreateFolder(String path) {
