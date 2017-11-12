@@ -15,10 +15,13 @@ import javax.ejb.Local;
  * @author Adam
  */
 @Local
-public interface Exchanger {
+public interface Exchanger{
     public Optional<Exchange> getActualExchangeForBase(Currency base);
     public Optional<Exchange> getActualExchangeForBaseForSymbols(Currency base, Currency ... symbols);
     
     public Optional<Exchange> getActualExchangeForBase(String base);
     public Optional<Exchange> getActualExchangeForBaseForSymbols(String base, String ... symbols);
+    
+    public boolean saveLatestExchangeToDatabase();
+    public Optional<Exchange> getLastestExchangeFromDatabase();
 }

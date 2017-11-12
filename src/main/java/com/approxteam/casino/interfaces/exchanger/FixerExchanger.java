@@ -5,33 +5,38 @@
  */
 package com.approxteam.casino.interfaces.exchanger;
 
+import com.approxteam.casino.configuration.PropertiesBuilder;
+import com.approxteam.casino.configuration.PropertyComment;
+import com.approxteam.casino.entities.ExchangeRate;
+import com.approxteam.casino.entities.ExchangeStack;
+import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.Exchanger;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import java.util.Properties;
 import javax.ejb.Stateless;
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author Adam
  */
 @Stateless
-public class FixerExchanger implements Exchanger{
+@PropertyComment(defaultConf = {"baseCurrency=PLN"})
+public class FixerExchanger extends BasicBean implements Exchanger{
+    
+    @PersistenceContext(unitName = "casinoPU")
+    private EntityManager entityManager;
+    
+    private final static Properties properties = PropertiesBuilder.getProperties(FixerExchanger.class);
     
     @Override
     public Optional<Exchange> getActualExchangeForBase(Currency base) {
@@ -103,6 +108,38 @@ public class FixerExchanger implements Exchanger{
             currencies[j] = currencySymbol;
         }
         return getActualExchangeForBaseForSymbols(currency, currencies);
+    }
+
+    @Override
+    public boolean saveLatestExchangeToDatabase() {
+        Currency base = Currency.valueOf(properties.getProperty("baseCurrency"));
+        if(base == null) {
+            return false;
+        }
+        Optional<Exchange> exchange = getActualExchangeForBase(base);
+        if(!exchange.isPresent()) {
+            return false;
+        }
+        
+        Date now = new Date();
+        Exchange ex = exchange.get();
+        ExchangeStack stack = new ExchangeStack();
+        stack.setCreated(new Date());
+        for (Map.Entry<Currency, Double> rate : exchange.get().getCurrentCurrency().entrySet()) {
+            ExchangeRate dbRate = new ExchangeRate();
+            dbRate.setBase(base);
+            dbRate.setDate(ex.getDate());
+            dbRate.setCurrency(rate.getKey());
+            dbRate.setRate(rate.getValue());
+            dbRate.setStack(stack);
+            stack.getRates().add(dbRate);
+        }
+        return save(stack);
+    }
+
+    @Override
+    public Optional<Exchange> getLastestExchangeFromDatabase() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -6,6 +6,7 @@
 package com.approxteam.casino.init;
 
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
+import com.approxteam.casino.interfaces.Exchanger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -22,6 +23,9 @@ public class CasinoInitializer {
     @EJB
     private CasinoSettingsManager settingsManager;
     
+    @EJB
+    private Exchanger exchanger;
+    
     @PostConstruct
     void init() {
         PredefinedCasinoSetting[] defaultSettings = PredefinedCasinoSetting.values();
@@ -31,5 +35,6 @@ public class CasinoInitializer {
                 settingsManager.setSettingFor(settingName, defaultSetting.getValue());
             }
         }
+        exchanger.saveLatestExchangeToDatabase();
     }
 }

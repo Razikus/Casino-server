@@ -8,10 +8,16 @@ package com.approxteam.casino.entities;
 import com.approxteam.casino.interfaces.exchanger.Currency;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -33,15 +39,19 @@ public class ExchangeRate implements Serializable {
         this.id = id;
     }
     
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date date;
     
-    private Date created;
-    
+    @Enumerated(EnumType.STRING)
     private Currency base;
     
+    @Enumerated(EnumType.STRING)
     private Currency currency;
     
     private Double rate;
+    
+    @ManyToOne
+    private ExchangeStack stack;
 
     public Date getDate() {
         return date;
@@ -75,38 +85,58 @@ public class ExchangeRate implements Serializable {
         this.rate = rate;
     }
 
-    public Date getCreated() {
-        return created;
+    public ExchangeStack getStack() {
+        return stack;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
+    public void setStack(ExchangeStack stack) {
+        this.stack = stack;
     }
     
     
 
-    
-    
-    
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + Objects.hashCode(this.date);
+        hash = 97 * hash + Objects.hashCode(this.base);
+        hash = 97 * hash + Objects.hashCode(this.currency);
+        hash = 97 * hash + Objects.hashCode(this.rate);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ExchangeRate)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        ExchangeRate other = (ExchangeRate) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ExchangeRate other = (ExchangeRate) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.date, other.date)) {
+            return false;
+        }
+        if (this.base != other.base) {
+            return false;
+        }
+        if (this.currency != other.currency) {
+            return false;
+        }
+        if (!Objects.equals(this.rate, other.rate)) {
             return false;
         }
         return true;
     }
+    
+    
 
     @Override
     public String toString() {
