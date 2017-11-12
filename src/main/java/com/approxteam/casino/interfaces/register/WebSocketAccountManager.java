@@ -35,7 +35,7 @@ import com.approxteam.casino.interfaces.mailer.PasswordChangeMail;
  * @author adamr
  */
 @Stateful
-@PropertyComment(desc = "Provide default link")
+@PropertyComment(desc = "Provide default link", defaultConf = {"appLink=http://localhost:7171/build/"})
 public class WebSocketAccountManager extends BasicBean implements AccountManager{
 
     private final Properties properties = PropertiesBuilder.getProperties(WebSocketAccountManager.class);

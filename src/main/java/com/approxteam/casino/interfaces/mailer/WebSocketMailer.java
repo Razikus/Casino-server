@@ -25,7 +25,7 @@ import org.apache.logging.log4j.LogManager;
  *
  * @author adamr
  */
-@PropertyComment(desc = "Mailer settings")
+@PropertyComment(desc = "Mailer settings", defaultConf = {"username=username", "password=password", "mail.smtp.auth=true", "mail.smtp.starttls.enable=true", "mail.smtp.host=smtp.gmail.com", "mail.smtp.port=587"})
 @Stateless
 public class WebSocketMailer implements Mailer{
     private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(WebSocketMailer.class);

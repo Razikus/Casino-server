@@ -14,6 +14,7 @@ import com.approxteam.casino.interfaces.AccountManager;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.Mailer;
 import com.approxteam.casino.interfaces.WalletInterface;
+import com.approxteam.casino.interfaces.exchanger.Currency;
 import com.approxteam.casino.interfaces.mailer.ActivationMail;
 import com.approxteam.casino.interfaces.mailer.MailWrapper;
 import com.approxteam.casino.interfaces.mailer.PasswordChangeMail;
@@ -84,6 +85,7 @@ public class WebSocketWalletInterfaceTest {
                 .addClass(PropertiesBuilder.class)
                 .addClass(PropertyComment.class)
                 .addClass(BasicBean.class)
+                .addClass(Currency.class)
                 .addAsLibraries(files)
                 .addAsWebInfResource("wildfly-ds.xml")
                 .addAsResource("log4j2.xml", ArchivePaths.create("log4j2.xml"))

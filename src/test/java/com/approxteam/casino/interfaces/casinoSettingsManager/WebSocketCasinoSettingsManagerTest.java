@@ -8,6 +8,7 @@ package com.approxteam.casino.interfaces.casinoSettingsManager;
 import com.approxteam.casino.entities.CasinoSetting;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
+import com.approxteam.casino.interfaces.exchanger.Currency;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Objects;
@@ -67,6 +68,7 @@ public class WebSocketCasinoSettingsManagerTest {
                 .addClass(WebSocketCasinoSettingsManager.class)
                 .addClass(BasicBean.class)
                 .addClass(SerializationTest.class)
+                .addClass(Currency.class)
                 .addAsLibraries(files)
                 .addAsWebInfResource("wildfly-ds.xml")
                 .addAsResource("log4j2.xml", ArchivePaths.create("log4j2.xml"))

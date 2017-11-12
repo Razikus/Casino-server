@@ -11,6 +11,7 @@ import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import com.approxteam.casino.interfaces.RandomManager;
 import com.approxteam.casino.interfaces.casinoSettingsManager.WebSocketCasinoSettingsManager;
+import com.approxteam.casino.interfaces.exchanger.Currency;
 import com.approxteam.casino.interfaces.randomManger.WebSocketRandomManager;
 import java.io.File;
 import java.util.Optional;
@@ -70,6 +71,7 @@ public class WebSocketRandomManagerTest {
                 .addClass(WebSocketCasinoSettingsManager.class)
                 .addClass(PredefinedCasinoSetting.class)
                 .addClass(BasicBean.class)
+                .addClass(Currency.class)
                 .addAsLibraries(files)
                 .addAsWebInfResource("wildfly-ds.xml")
                 .addAsResource("log4j2.xml", ArchivePaths.create("log4j2.xml"))
