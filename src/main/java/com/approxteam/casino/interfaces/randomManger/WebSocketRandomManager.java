@@ -5,6 +5,7 @@
  */
 package com.approxteam.casino.interfaces.randomManger;
 
+import com.approxteam.casino.exceptions.SettingNotFoundException;
 import com.approxteam.casino.init.PredefinedCasinoSetting;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import com.approxteam.casino.interfaces.RandomManager;
@@ -32,20 +33,20 @@ public class WebSocketRandomManager implements RandomManager{
     }
     
     @Override
-    public boolean win(PredefinedCasinoSetting setting) throws IllegalStateException {
+    public boolean win(PredefinedCasinoSetting setting) throws SettingNotFoundException {
         Optional<Double> value = settingsManager.getDoubleSettingFor(setting.getSettingName());
         if(!value.isPresent()) {
-            throw new IllegalStateException("Setting not in database");
+            throw new SettingNotFoundException("Setting not in database");
         } else {
             return win(value.get());
         }
     }
     
     @Override
-    public boolean win(String setting) throws IllegalStateException {
+    public boolean win(String setting) throws SettingNotFoundException {
         Optional<Double> value = settingsManager.getDoubleSettingFor(setting);
         if(!value.isPresent()) {
-            throw new IllegalStateException("Setting not in database");
+            throw new SettingNotFoundException("Setting not in database");
         } else {
             return win(value.get());
         }

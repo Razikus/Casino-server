@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author Adam
  */
 public enum WebClientActionType implements Serializable {
-    REFRESHUSERS();
+    REFRESHUSERS(),
+    GUN_FIRE_RESPONSE();
     
 }

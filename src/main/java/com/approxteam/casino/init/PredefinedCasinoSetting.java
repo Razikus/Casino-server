@@ -13,7 +13,10 @@ import java.io.Serializable;
  */
 public enum PredefinedCasinoSetting {
 
-    GUNNER_WINRATE(0.33);
+    GUNNER_WINRATE(0.33),
+    GUNNER_UPPER_BOUND(1000),
+    GUNNER_WIN_PERCENT(0.50),
+    GUNNER_LOWER_BOUND(1);
 
     private String settingName;
     private Serializable value;

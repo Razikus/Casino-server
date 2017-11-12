@@ -5,6 +5,7 @@
  */
 package com.approxteam.casino.interfaces;
 
+import com.approxteam.casino.exceptions.SettingNotFoundException;
 import com.approxteam.casino.init.PredefinedCasinoSetting;
 import javax.ejb.Local;
 
@@ -16,7 +17,7 @@ import javax.ejb.Local;
 public interface RandomManager {
     
     public boolean win(Double chance);
-    public boolean win(PredefinedCasinoSetting setting) throws IllegalStateException;
-    public boolean win(String setting) throws IllegalStateException;
+    public boolean win(PredefinedCasinoSetting setting) throws SettingNotFoundException;
+    public boolean win(String setting) throws SettingNotFoundException;
     
 }
