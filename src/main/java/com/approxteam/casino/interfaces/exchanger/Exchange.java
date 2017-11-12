@@ -18,15 +18,15 @@ import java.util.Optional;
 public class Exchange implements Serializable {
     private Map<Currency, Double> rates;
     private Date date;
-    private String base;
+    private Currency base;
 
-    public Exchange(Date date, String base, Map<Currency, Double> currentCurrency) {
+    public Exchange(Date date, Currency base, Map<Currency, Double> currentCurrency) {
         this.rates = currentCurrency;
         this.date = date;
         this.base = base;
     }
     
-    public Exchange(Date date, String base, Map.Entry<Currency, Double> ... args) {
+    public Exchange(Date date, Currency base, Map.Entry<Currency, Double> ... args) {
         this.rates = new HashMap<>();
         for (Map.Entry<Currency, Double> arg : args) {
             rates.put(arg.getKey(), arg.getValue());
@@ -36,7 +36,7 @@ public class Exchange implements Serializable {
     }
     
     public Exchange() {
-        
+        this.rates = new HashMap<>();
     }
 
     private Optional<Double> getActualFor(Currency currency) {
@@ -55,12 +55,12 @@ public class Exchange implements Serializable {
         this.date = date;
     }
 
-    public void setBase(String base) {
+    public void setBase(Currency base) {
         this.base = base;
     }
     
     
-    public String getBase() {
+    public Currency getBase() {
         return base;
     }
     

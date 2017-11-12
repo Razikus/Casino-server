@@ -7,8 +7,10 @@ package com.approxteam.casino.interfaces.exchanger;
 
 import com.approxteam.casino.configuration.PropertiesBuilder;
 import com.approxteam.casino.configuration.PropertyComment;
+import com.approxteam.casino.entities.AccountPasswordRequest;
 import com.approxteam.casino.entities.ExchangeRate;
 import com.approxteam.casino.entities.ExchangeStack;
+import com.approxteam.casino.entities.ExchangeStack_;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.Exchanger;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +26,12 @@ import java.util.Properties;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 /**
  *
@@ -139,7 +147,40 @@ public class FixerExchanger extends BasicBean implements Exchanger{
 
     @Override
     public Optional<Exchange> getLastestExchangeFromDatabase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Optional<ExchangeStack> stack = getLatestExchangeStackFromDatabase();
+        if(!stack.isPresent()) {
+            return Optional.empty();
+        }
+        
+        ExchangeStack scrapped = stack.get();
+        Exchange newExchange = new Exchange();
+        for (ExchangeRate rate : scrapped.getRates()) {
+            newExchange.getCurrentCurrency().put(rate.getCurrency(), rate.getRate());
+            if(newExchange.getBase() == null) {
+                newExchange.setBase(rate.getBase());
+            }
+            if(newExchange.getDate() == null) {
+                newExchange.setDate(rate.getDate());
+            }
+        }
+        
+        return Optional.of(newExchange);
+    }
+    
+    private Optional<ExchangeStack> getLatestExchangeStackFromDatabase() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<ExchangeStack> cq = cb.createQuery(ExchangeStack.class);
+        Root<ExchangeStack> exchangeRoot = cq.from(ExchangeStack.class);
+        
+        Subquery<Date> sq = cq.subquery(Date.class);
+        Root<ExchangeStack> s2 = sq.from(ExchangeStack.class);
+        
+        sq.select(cb.greatest(s2.get(ExchangeStack_.created)));
+        
+        cq.where(cb.equal(exchangeRoot.get(ExchangeStack_.created), sq));
+        
+        TypedQuery<ExchangeStack> query = entityManager.createQuery(cq);
+        return Optional.of(query.getSingleResult());
     }
     
 }
