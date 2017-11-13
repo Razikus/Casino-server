@@ -36,7 +36,7 @@ import org.apache.logging.log4j.LogManager;
  *
  * @author rafal
  */
-public class GunFireConsumer extends BasicBean implements BiConsumer<PlayerHandler, Action>  {
+public class GunFireConsumer implements BiConsumer<PlayerHandler, Action>  {
 
     private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(AccountActivationConsumer.class);
     
@@ -60,7 +60,6 @@ public class GunFireConsumer extends BasicBean implements BiConsumer<PlayerHandl
                     GunResponse gr = new GunResponse(1,win);
                     if(walletInterface.increaseAccountWalletBy(acc, win, "Gunner Game win")){
                         gr.accept(t);
-                        log.info("x3");
                     }
                 }
                 else{
