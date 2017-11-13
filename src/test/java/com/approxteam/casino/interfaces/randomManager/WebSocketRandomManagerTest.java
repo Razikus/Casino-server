@@ -7,6 +7,7 @@ package com.approxteam.casino.interfaces.randomManager;
 
 import com.approxteam.casino.entities.CasinoSetting;
 import com.approxteam.casino.exceptions.SettingNotFoundException;
+import com.approxteam.casino.generalLogic.actions.utils.SerializableOptional;
 import com.approxteam.casino.init.PredefinedCasinoSetting;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
@@ -74,6 +75,7 @@ public class WebSocketRandomManagerTest {
                 .addClass(BasicBean.class)
                 .addClass(SettingNotFoundException.class)
                 .addClass(Currency.class)
+                .addClass(SerializableOptional.class)
                 .addAsLibraries(files)
                 .addAsWebInfResource("wildfly-ds.xml")
                 .addAsResource("log4j2.xml", ArchivePaths.create("log4j2.xml"))
@@ -106,7 +108,7 @@ public class WebSocketRandomManagerTest {
         Double random = RandomUtils.nextDouble();
         settingsManager.setSettingFor(name, random);
         
-        Optional<Double> fromDB = settingsManager.getDoubleSettingFor(name);
+        SerializableOptional<Double> fromDB = settingsManager.getDoubleSettingFor(name);
         assertTrue(fromDB.isPresent());
         
         Double rate = getTestRateCheck(10000, fromDB.get());

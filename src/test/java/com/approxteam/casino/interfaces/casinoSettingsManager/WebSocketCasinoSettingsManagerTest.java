@@ -6,6 +6,7 @@
 package com.approxteam.casino.interfaces.casinoSettingsManager;
 
 import com.approxteam.casino.entities.CasinoSetting;
+import com.approxteam.casino.generalLogic.actions.utils.SerializableOptional;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import com.approxteam.casino.interfaces.exchanger.Currency;
@@ -69,6 +70,7 @@ public class WebSocketCasinoSettingsManagerTest {
                 .addClass(BasicBean.class)
                 .addClass(SerializationTest.class)
                 .addClass(Currency.class)
+                .addClass(SerializableOptional.class)
                 .addAsLibraries(files)
                 .addAsWebInfResource("wildfly-ds.xml")
                 .addAsResource("log4j2.xml", ArchivePaths.create("log4j2.xml"))
@@ -86,7 +88,7 @@ public class WebSocketCasinoSettingsManagerTest {
         boolean expResult = true;
         boolean result = settingsManager.setSettingFor(name, value);
         assertEquals(expResult, result);
-        Optional<String> fromDatabase = settingsManager.getStringSettingFor(name);
+        SerializableOptional<String> fromDatabase = settingsManager.getStringSettingFor(name);
         assertTrue(fromDatabase.isPresent());
         assertEquals(fromDatabase.get(), value);
     }
@@ -98,7 +100,7 @@ public class WebSocketCasinoSettingsManagerTest {
         boolean expResult = true;
         boolean result = settingsManager.setSettingFor(name, value);
         assertEquals(expResult, result);
-        Optional<String> fromDatabase = settingsManager.getStringSettingFor(name);
+        SerializableOptional<String> fromDatabase = settingsManager.getStringSettingFor(name);
         assertTrue(fromDatabase.isPresent());
         assertEquals(fromDatabase.get(), value);
         
@@ -123,7 +125,7 @@ public class WebSocketCasinoSettingsManagerTest {
         boolean expResult = true;
         boolean result = settingsManager.setSettingFor(name, value);
         assertEquals(expResult, result);
-        Optional<CasinoSetting> fromDatabase = settingsManager.getSettingFor(name);
+        SerializableOptional<CasinoSetting> fromDatabase = settingsManager.getSettingFor(name);
         assertTrue(fromDatabase.isPresent());
     }
 
@@ -138,7 +140,7 @@ public class WebSocketCasinoSettingsManagerTest {
         boolean expResult = true;
         boolean result = settingsManager.setSettingFor(name, value);
         assertEquals(expResult, result);
-        Optional<String> fromDatabase = settingsManager.getStringSettingFor(name);
+        SerializableOptional<String> fromDatabase = settingsManager.getStringSettingFor(name);
         assertTrue(fromDatabase.isPresent());
         assertEquals(fromDatabase.get(), value);
         
@@ -183,7 +185,7 @@ public class WebSocketCasinoSettingsManagerTest {
         boolean expResult = true;
         boolean result = settingsManager.setSettingFor(name, value);
         assertEquals(expResult, result);
-        Optional<Boolean> fromDatabase = settingsManager.getBooleanSettingFor(name);
+        SerializableOptional<Boolean> fromDatabase = settingsManager.getBooleanSettingFor(name);
         assertTrue(fromDatabase.isPresent());
         assertEquals(fromDatabase.get(), value);
     }
@@ -198,7 +200,7 @@ public class WebSocketCasinoSettingsManagerTest {
         boolean expResult = true;
         boolean result = settingsManager.setSettingFor(name, value);
         assertEquals(expResult, result);
-        Optional<Double> fromDatabase = settingsManager.getDoubleSettingFor(name);
+        SerializableOptional<Double> fromDatabase = settingsManager.getDoubleSettingFor(name);
         assertTrue(fromDatabase.isPresent());
         assertEquals(fromDatabase.get(), value);
     }
@@ -213,7 +215,7 @@ public class WebSocketCasinoSettingsManagerTest {
         boolean expResult = true;
         boolean result = settingsManager.setSettingFor(name, value);
         assertEquals(expResult, result);
-        Optional<Float> fromDatabase = settingsManager.getFloatSettingFor(name);
+        SerializableOptional<Float> fromDatabase = settingsManager.getFloatSettingFor(name);
         assertTrue(fromDatabase.isPresent());
         assertEquals(fromDatabase.get(), value);
     }
@@ -228,7 +230,7 @@ public class WebSocketCasinoSettingsManagerTest {
         boolean expResult = true;
         boolean result = settingsManager.setSettingFor(name, value);
         assertEquals(expResult, result);
-        Optional<Integer> fromDatabase = settingsManager.getIntegerSettingFor(name);
+        SerializableOptional<Integer> fromDatabase = settingsManager.getIntegerSettingFor(name);
         assertTrue(fromDatabase.isPresent());
         assertEquals(fromDatabase.get(), value);
     }
@@ -240,7 +242,7 @@ public class WebSocketCasinoSettingsManagerTest {
         boolean expResult = true;
         boolean result = settingsManager.setSettingFor(name, value);
         assertEquals(expResult, result);
-        Optional<SerializationTest> fromDatabase = settingsManager.getObjectSettingFor(name);
+        SerializableOptional<SerializationTest> fromDatabase = settingsManager.getObjectSettingFor(name);
         assertTrue(fromDatabase.isPresent());
         assertEquals(fromDatabase.get(), value);
     }

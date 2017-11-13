@@ -17,6 +17,7 @@ import com.approxteam.casino.generalLogic.actions.predicates.InState;
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  *
@@ -29,7 +30,7 @@ public enum ActionConsumer implements Serializable {
     ACCOUNTACTIVATION(new AccountActivationConsumer()),
     PASSWORDCHANGEREQUEST(new PasswordChangeRequestConsumer()),
     PASSWORDCHANGE(new PasswordChangeConsumer()),
-    GUNFIRE(new GunFireConsumer());
+    GUNFIRE(new GunFireConsumer(), new InState(PlayerState.CHOOSING));
     
     private BiConsumer<PlayerHandler, Action> consumer;
     private BiPredicate<PlayerHandler, Action>[] predicates;

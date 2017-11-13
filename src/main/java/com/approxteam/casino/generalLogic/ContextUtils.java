@@ -12,9 +12,15 @@ import javax.naming.NamingException;
 import org.apache.logging.log4j.LogManager;
 import com.approxteam.casino.interfaces.AccountManager;
 import com.approxteam.casino.interfaces.CasinoManager;
+import com.approxteam.casino.interfaces.CasinoSettingsManager;
+import com.approxteam.casino.interfaces.RandomManager;
+import com.approxteam.casino.interfaces.WalletInterface;
+import com.approxteam.casino.interfaces.casinoSettingsManager.WebSocketCasinoSettingsManager;
 import com.approxteam.casino.interfaces.casinomanager.WebSocketCasinoManager;
 import com.approxteam.casino.interfaces.mailer.WebSocketMailer;
+import com.approxteam.casino.interfaces.randomManger.WebSocketRandomManager;
 import com.approxteam.casino.interfaces.register.WebSocketAccountManager;
+import com.approxteam.casino.interfaces.wallet.WebSocketWalletInterface;
 
 /**
  *
@@ -49,6 +55,18 @@ public class ContextUtils {
     
     public static CasinoManager getCasinoManager() {
         return getBean(CasinoManager.class, WebSocketCasinoManager.class);
+    }
+    
+    public static WalletInterface getWalletInterface() {
+        return getBean(WalletInterface.class, WebSocketWalletInterface.class);
+    }
+    
+    public static RandomManager getRandomManager() {
+        return getBean(RandomManager.class, WebSocketRandomManager.class);
+    }
+    
+    public static CasinoSettingsManager getSettingsManager() {
+        return getBean(CasinoSettingsManager.class, WebSocketCasinoSettingsManager.class);
     }
     
     

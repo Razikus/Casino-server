@@ -6,25 +6,27 @@
 package com.approxteam.casino.interfaces;
 
 import com.approxteam.casino.entities.CasinoSetting;
+import com.approxteam.casino.generalLogic.actions.utils.SerializableOptional;
 import java.io.Serializable;
 import java.util.Optional;
 import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author Adam
  */
-@Local
+@Remote
 public interface CasinoSettingsManager {
-    public Optional<CasinoSetting> getSettingFor(String name);
+    public SerializableOptional<CasinoSetting> getSettingFor(String name);
     public boolean setSettingFor(String name, Serializable value);
     
-    public Optional<String> getStringSettingFor(String name);
-    public Optional<Boolean> getBooleanSettingFor(String name);
-    public Optional<Double> getDoubleSettingFor(String name);
-    public Optional<Float> getFloatSettingFor(String name);
-    public Optional<Integer> getIntegerSettingFor(String name);
+    public SerializableOptional<String> getStringSettingFor(String name);
+    public SerializableOptional<Boolean> getBooleanSettingFor(String name);
+    public SerializableOptional<Double> getDoubleSettingFor(String name);
+    public SerializableOptional<Float> getFloatSettingFor(String name);
+    public SerializableOptional<Integer> getIntegerSettingFor(String name);
     
-    public <T> Optional<T> getObjectSettingFor(String name);
+    public <T extends Serializable> SerializableOptional<T> getObjectSettingFor(String name);
     
 }

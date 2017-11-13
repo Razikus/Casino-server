@@ -7,6 +7,7 @@ package com.approxteam.casino.interfaces.casinoSettingsManager;
 
 import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.CasinoSetting;
+import com.approxteam.casino.generalLogic.actions.utils.SerializableOptional;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import java.io.Serializable;
@@ -38,12 +39,12 @@ public class WebSocketCasinoSettingsManager extends BasicBean implements CasinoS
     private static final Class[] classesToString = new Class[] {String.class, Double.class, Byte.class, Integer.class, Boolean.class, Float.class};
     
     @Override
-    public Optional<CasinoSetting> getSettingFor(String name) {
+    public SerializableOptional<CasinoSetting> getSettingFor(String name) {
         if(name == null || name.length() <= 0) {
             log.info("SettingName null or length = 0");
-            return Optional.empty();
+            return SerializableOptional.empty();
         }
-        return Optional.ofNullable(getSettingFromDatabase(name));
+        return SerializableOptional.ofNullable(getSettingFromDatabase(name));
     }
 
     @Override
@@ -54,13 +55,13 @@ public class WebSocketCasinoSettingsManager extends BasicBean implements CasinoS
         if(name.length() <= 0) {
             return false;
         }
-        Optional<CasinoSetting> setting = getSettingFor(name);
+        SerializableOptional<CasinoSetting> setting = getSettingFor(name);
         
         for (Class class1 : classesToString) {
             if(value.getClass().equals(class1)) {
-                if(setting.isPresent()) {
-                    setting.get().setStringValue(value.toString());
-                    return merge(setting.get());
+                if(setting.asOptional().isPresent()) {
+                    setting.asOptional().get().setStringValue(value.toString());
+                    return merge(setting.asOptional().get());
                 } else {
                     CasinoSetting newSetting = new CasinoSetting();
                     newSetting.setName(name);
@@ -70,9 +71,9 @@ public class WebSocketCasinoSettingsManager extends BasicBean implements CasinoS
             }
         }
         
-        if(setting.isPresent()) {
-            setting.get().setStringValue(serializeToString(value));
-            return merge(setting.get());
+        if(setting.asOptional().isPresent()) {
+            setting.asOptional().get().setStringValue(serializeToString(value));
+            return merge(setting.asOptional().get());
         } else {
             CasinoSetting newSetting = new CasinoSetting();
             newSetting.setName(name);
@@ -107,66 +108,66 @@ public class WebSocketCasinoSettingsManager extends BasicBean implements CasinoS
     
 
     @Override
-    public <T> Optional<T> getObjectSettingFor(String name) {
-        Optional<CasinoSetting> setting = getSettingFor(name);
-        if(setting.isPresent()) {
-            Object deserialized = deserializeToObject(setting.get().getStringValue());
+    public <T extends Serializable> SerializableOptional<T> getObjectSettingFor(String name) {
+        SerializableOptional<CasinoSetting> setting = getSettingFor(name);
+        if(setting.asOptional().isPresent()) {
+            Object deserialized = deserializeToObject(setting.asOptional().get().getStringValue());
             if(deserialized != null) {
                 T value = null;
                 try {
                     value = (T) deserialized;
                 } catch(ClassCastException e) {
-                    return Optional.empty();
+                    return SerializableOptional.empty();
                 }
-                return Optional.of(value);
+                return SerializableOptional.of(value);
             }
         }
-        return Optional.empty();
+        return SerializableOptional.empty();
     }
     
     @Override
-    public Optional<String> getStringSettingFor(String name) {
-        Optional<CasinoSetting> setting = getSettingFor(name);
+    public SerializableOptional<String> getStringSettingFor(String name) {
+        SerializableOptional<CasinoSetting> setting = getSettingFor(name);
         if(setting.isPresent()) {
-            return Optional.of(setting.get().getStringValue());
+            return SerializableOptional.of(setting.get().getStringValue());
         }
-        return Optional.empty();
+        return SerializableOptional.empty();
     }
 
     @Override
-    public Optional<Boolean> getBooleanSettingFor(String name) {
-        Optional<String> stringSetting = getStringSettingFor(name);
+    public SerializableOptional<Boolean> getBooleanSettingFor(String name) {
+        SerializableOptional<String> stringSetting = getStringSettingFor(name);
         if(stringSetting.isPresent()) {
-            return Optional.of(Boolean.valueOf(stringSetting.get()));
+            return SerializableOptional.of(Boolean.valueOf(stringSetting.get()));
         }
-        return Optional.empty();
+        return SerializableOptional.empty();
     }
 
     @Override
-    public Optional<Double> getDoubleSettingFor(String name) {
-        Optional<String> stringSetting = getStringSettingFor(name);
+    public SerializableOptional<Double> getDoubleSettingFor(String name) {
+        SerializableOptional<String> stringSetting = getStringSettingFor(name);
         if(stringSetting.isPresent()) {
-            return Optional.of(Double.valueOf(stringSetting.get()));
+            return SerializableOptional.of(Double.valueOf(stringSetting.get()));
         }
-        return Optional.empty();
+        return SerializableOptional.empty();
     }
 
     @Override
-    public Optional<Float> getFloatSettingFor(String name) {
-        Optional<String> stringSetting = getStringSettingFor(name);
+    public SerializableOptional<Float> getFloatSettingFor(String name) {
+        SerializableOptional<String> stringSetting = getStringSettingFor(name);
         if(stringSetting.isPresent()) {
-            return Optional.of(Float.valueOf(stringSetting.get()));
+            return SerializableOptional.of(Float.valueOf(stringSetting.get()));
         }
-        return Optional.empty();
+        return SerializableOptional.empty();
     }
 
     @Override
-    public Optional<Integer> getIntegerSettingFor(String name) {
-        Optional<String> stringSetting = getStringSettingFor(name);
+    public SerializableOptional<Integer> getIntegerSettingFor(String name) {
+        SerializableOptional<String> stringSetting = getStringSettingFor(name);
         if(stringSetting.isPresent()) {
-            return Optional.of(Integer.valueOf(stringSetting.get()));
+            return SerializableOptional.of(Integer.valueOf(stringSetting.get()));
         }
-        return Optional.empty();
+        return SerializableOptional.empty();
     }
     
     private CasinoSetting getSettingFromDatabase(String settingName) {

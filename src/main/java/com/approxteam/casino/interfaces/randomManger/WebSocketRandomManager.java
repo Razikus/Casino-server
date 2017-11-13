@@ -6,6 +6,7 @@
 package com.approxteam.casino.interfaces.randomManger;
 
 import com.approxteam.casino.exceptions.SettingNotFoundException;
+import com.approxteam.casino.generalLogic.actions.utils.SerializableOptional;
 import com.approxteam.casino.init.PredefinedCasinoSetting;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import com.approxteam.casino.interfaces.RandomManager;
@@ -34,7 +35,7 @@ public class WebSocketRandomManager implements RandomManager{
     
     @Override
     public boolean win(PredefinedCasinoSetting setting) throws SettingNotFoundException {
-        Optional<Double> value = settingsManager.getDoubleSettingFor(setting.getSettingName());
+        SerializableOptional<Double> value = settingsManager.getDoubleSettingFor(setting.getSettingName());
         if(!value.isPresent()) {
             throw new SettingNotFoundException("Setting not in database");
         } else {
@@ -44,7 +45,7 @@ public class WebSocketRandomManager implements RandomManager{
     
     @Override
     public boolean win(String setting) throws SettingNotFoundException {
-        Optional<Double> value = settingsManager.getDoubleSettingFor(setting);
+        SerializableOptional<Double> value = settingsManager.getDoubleSettingFor(setting);
         if(!value.isPresent()) {
             throw new SettingNotFoundException("Setting not in database");
         } else {

@@ -37,7 +37,7 @@ public class ArgUtils {
     
     public static Double getParameterDouble(Action action, ActionParameter parameter){
         String d = getParameter(action , parameter.getName());
-        if(d != null && d.getClass().equals(Double.class)) {
+        if(d != null && d.getClass().equals(String.class)) {
             return Double.valueOf(d);
         } else {
             return null;

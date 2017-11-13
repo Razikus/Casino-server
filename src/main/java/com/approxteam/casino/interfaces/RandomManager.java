@@ -8,12 +8,13 @@ package com.approxteam.casino.interfaces;
 import com.approxteam.casino.exceptions.SettingNotFoundException;
 import com.approxteam.casino.init.PredefinedCasinoSetting;
 import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author Adam
  */
-@Local
+@Remote
 public interface RandomManager {
     
     public boolean win(Double chance);
