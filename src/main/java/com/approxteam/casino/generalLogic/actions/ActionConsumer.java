@@ -8,6 +8,7 @@ package com.approxteam.casino.generalLogic.actions;
 import com.approxteam.casino.generalLogic.PlayerHandler;
 import com.approxteam.casino.generalLogic.PlayerState;
 import com.approxteam.casino.generalLogic.actions.consumers.AccountActivationConsumer;
+import com.approxteam.casino.generalLogic.actions.consumers.GunFireConsumer;
 import com.approxteam.casino.generalLogic.actions.consumers.LoginConsumer;
 import com.approxteam.casino.generalLogic.actions.consumers.PasswordChangeConsumer;
 import com.approxteam.casino.generalLogic.actions.consumers.PasswordChangeRequestConsumer;
@@ -27,7 +28,8 @@ public enum ActionConsumer implements Serializable {
     LOGIN(new LoginConsumer(), new InState(PlayerState.MAINMENU)),
     ACCOUNTACTIVATION(new AccountActivationConsumer()),
     PASSWORDCHANGEREQUEST(new PasswordChangeRequestConsumer()),
-    PASSWORDCHANGE(new PasswordChangeConsumer());
+    PASSWORDCHANGE(new PasswordChangeConsumer()),
+    GUNFIRE(new GunFireConsumer());
     
     private BiConsumer<PlayerHandler, Action> consumer;
     private BiPredicate<PlayerHandler, Action>[] predicates;

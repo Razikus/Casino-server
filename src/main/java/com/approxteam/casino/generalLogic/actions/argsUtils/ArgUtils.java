@@ -35,6 +35,16 @@ public class ArgUtils {
         }
     }
     
+    public static Double getParameterDouble(Action action, ActionParameter parameter){
+        String d = getParameter(action , parameter.getName());
+        if(d != null && d.getClass().equals(Double.class)) {
+            return Double.valueOf(d);
+        } else {
+            return null;
+        }
+        
+    }
+    
      public static String getParameterString(Action action, ActionParameter parameter) {
         return getParameter(action, parameter.getName());
     }
