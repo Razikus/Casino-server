@@ -16,7 +16,11 @@ public enum PredefinedCasinoSetting {
     GUNNER_WINRATE(0.33),
     GUNNER_UPPER_BOUND(1000),
     GUNNER_WIN_PERCENT(0.50),
-    GUNNER_LOWER_BOUND(1);
+    GUNNER_LOWER_BOUND(1),
+    BUSKET_STANDARD_BID(50),
+    BUSKET_STANDARD_CAPACITY(1000),
+    BUSKET_RANDOMIZER("TRUE"),
+    BUSKET_RANDOMIZER_VALUE(0.30);
 
     private String settingName;
     private Serializable value;
