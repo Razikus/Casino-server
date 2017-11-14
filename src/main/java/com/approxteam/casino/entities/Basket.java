@@ -36,14 +36,12 @@ public class Basket implements Serializable {
     @OneToMany(mappedBy = "basket", fetch = FetchType.LAZY)
     private List<BasketLog> basketLogs = new ArrayList<>();
     
-    @Transient
-    CasinoSettingsManager settingsManager = ContextUtils.getSettingsManager();
     
     @Column(nullable = false)
-    private Double bid = settingsManager.getDoubleSettingFor(PredefinedCasinoSetting.BUSKET_STANDARD_BID.getSettingName()).get();
+    private Double bid;
 
     @Column(nullable = false)
-    private Integer capacity = settingsManager.getIntegerSettingFor(PredefinedCasinoSetting.BUSKET_STANDARD_CAPACITY.getSettingName()).get();
+    private Integer capacity;
     
     @Column(nullable = false)
     private Integer playersCount = 0;
