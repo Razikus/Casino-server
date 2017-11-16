@@ -10,8 +10,8 @@ package com.approxteam.casino.generalLogic;
  * @author adamr
  */
 public enum PlayerState {
-    MAINMENU,
-    CHOOSING,
+    NOTLOGGED,
+    LOGGED,
     PAYING,
     PLAYING;
     

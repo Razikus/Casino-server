@@ -17,7 +17,7 @@ import javax.websocket.Session;
  */
 public class PlayerHandler implements Serializable {
             
-    private static BiPredicate<PlayerHandler, Action> notInState = new NotInState(PlayerState.MAINMENU);
+    private static BiPredicate<PlayerHandler, Action> notInState = new NotInState(PlayerState.NOTLOGGED);
     
     private static boolean isLogged(PlayerHandler handler) {
         return notInState.test(handler, null) && handler.getNickname() != null;
@@ -27,7 +27,7 @@ public class PlayerHandler implements Serializable {
     private Session session;
     private String nickname;
     public PlayerHandler(Session session) {
-        this.playerState = PlayerState.MAINMENU;
+        this.playerState = PlayerState.NOTLOGGED;
         this.session = session;
     }
 

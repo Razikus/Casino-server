@@ -17,7 +17,7 @@ import com.approxteam.casino.generalLogic.actions.ResponseType;
 import com.approxteam.casino.generalLogic.actions.SessionUtils;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
-import com.approxteam.casino.generalLogic.actions.eachConsumers.GunResponse;
+import com.approxteam.casino.generalLogic.actions.webClient.consumers.GunResponse;
 import com.approxteam.casino.init.PredefinedCasinoSetting;
 import com.approxteam.casino.interfaces.AccountManager;
 import com.approxteam.casino.interfaces.BasicBean;

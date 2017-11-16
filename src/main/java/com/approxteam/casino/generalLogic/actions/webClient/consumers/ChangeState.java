@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.approxteam.casino.generalLogic.actions.eachConsumers;
+package com.approxteam.casino.generalLogic.actions.webClient.consumers;
 
 import com.approxteam.casino.generalLogic.PlayerHandler;
+import com.approxteam.casino.generalLogic.PlayerState;
 import com.approxteam.casino.generalLogic.actions.SerializableEntry;
 import com.approxteam.casino.generalLogic.actions.SessionUtils;
+import com.approxteam.casino.generalLogic.actions.eachConsumers.CasinoConsumer;
 import com.approxteam.casino.generalLogic.actions.webClient.WebClientAction;
 import com.approxteam.casino.generalLogic.actions.webClient.WebClientActionType;
 
@@ -15,18 +17,17 @@ import com.approxteam.casino.generalLogic.actions.webClient.WebClientActionType;
  *
  * @author Adam
  */
-public class RefreshPlayersState extends CasinoConsumer {
+public class ChangeState extends CasinoConsumer{
 
-    private int players;
+    private PlayerState state;
 
-    public RefreshPlayersState(int players) {
-        this.players = players;
+    public ChangeState(PlayerState state) {
+        this.state = state;
     }
-    
     
     @Override
     public void accept(PlayerHandler t) {
-        WebClientAction action = WebClientAction.of(WebClientActionType.REFRESHUSERS, SerializableEntry.of("players", players));
+        WebClientAction action = WebClientAction.of(WebClientActionType.CHANGE_STATE, SerializableEntry.of("newState", state.name()));
         SessionUtils.serializeAndSendAsynchronously(t, action);
     }
     

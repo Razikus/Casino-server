@@ -49,12 +49,12 @@ public class NotInStateTest {
     public void testTest() {
         Session session = mock(Session.class);
         PlayerHandler player = new PlayerHandler(session);
-        player.switchState(PlayerState.CHOOSING);
+        player.switchState(PlayerState.LOGGED);
         PlayerHandler player2 = new PlayerHandler(session);
         Action action = null;
         
         //Not in state
-        NotInState instance = new NotInState(PlayerState.CHOOSING, PlayerState.MAINMENU);
+        NotInState instance = new NotInState(PlayerState.LOGGED, PlayerState.NOTLOGGED);
         boolean expResult = false;
         boolean result = instance.test(player, action);
         assertEquals(expResult, result);

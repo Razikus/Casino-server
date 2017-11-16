@@ -46,7 +46,7 @@ public class PlayerHandlerTest {
     public void testGetPlayerState() {
         Session session = mock(Session.class);
         PlayerHandler handler = new PlayerHandler(session);
-        assertEquals(handler.getPlayerState(), PlayerState.MAINMENU);
+        assertEquals(handler.getPlayerState(), PlayerState.NOTLOGGED);
     }
 
     /**
@@ -56,8 +56,8 @@ public class PlayerHandlerTest {
     public void testSwitchState() {
         Session session = mock(Session.class);
         PlayerHandler handler = new PlayerHandler(session);
-        handler.switchState(PlayerState.CHOOSING);
-        assertEquals(handler.getPlayerState(), PlayerState.CHOOSING);
+        handler.switchState(PlayerState.LOGGED);
+        assertEquals(handler.getPlayerState(), PlayerState.LOGGED);
     }
     
 }

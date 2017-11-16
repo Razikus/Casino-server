@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.approxteam.casino.generalLogic.actions.eachConsumers;
+package com.approxteam.casino.generalLogic.actions.webClient.consumers;
 
 import com.approxteam.casino.generalLogic.PlayerHandler;
 import com.approxteam.casino.generalLogic.actions.SerializableEntry;
 import com.approxteam.casino.generalLogic.actions.SessionUtils;
-import com.approxteam.casino.generalLogic.actions.WebClientAction;
-import com.approxteam.casino.generalLogic.actions.WebClientActionType;
+import com.approxteam.casino.generalLogic.actions.eachConsumers.CasinoConsumer;
+import com.approxteam.casino.generalLogic.actions.webClient.WebClientAction;
+import com.approxteam.casino.generalLogic.actions.webClient.WebClientActionType;
 
 /**
  *

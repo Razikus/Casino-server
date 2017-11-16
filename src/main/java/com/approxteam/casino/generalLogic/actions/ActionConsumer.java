@@ -25,12 +25,12 @@ import javax.enterprise.context.ApplicationScoped;
  */
 public enum ActionConsumer implements Serializable {
     
-    REGISTER(new RegisterConsumer(), new InState(PlayerState.MAINMENU)),
-    LOGIN(new LoginConsumer(), new InState(PlayerState.MAINMENU)),
+    REGISTER(new RegisterConsumer(), new InState(PlayerState.NOTLOGGED)),
+    LOGIN(new LoginConsumer(), new InState(PlayerState.NOTLOGGED)),
     ACCOUNTACTIVATION(new AccountActivationConsumer()),
     PASSWORDCHANGEREQUEST(new PasswordChangeRequestConsumer()),
     PASSWORDCHANGE(new PasswordChangeConsumer()),
-    GUNFIRE(new GunFireConsumer(), new InState(PlayerState.CHOOSING));
+    GUNFIRE(new GunFireConsumer(), new InState(PlayerState.LOGGED));
     
     private BiConsumer<PlayerHandler, Action> consumer;
     private BiPredicate<PlayerHandler, Action>[] predicates;
