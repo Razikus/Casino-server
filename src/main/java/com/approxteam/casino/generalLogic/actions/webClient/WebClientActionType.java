@@ -14,6 +14,7 @@ import java.io.Serializable;
 public enum WebClientActionType implements Serializable {
     REFRESHUSERS(),
     GUN_FIRE_RESPONSE(),
-    CHANGE_STATE();
+    CHANGE_STATE(),
+    REFRESHMONEY();
     
 }
