@@ -27,7 +27,14 @@ public class CasinoInitializer {
     private Exchanger exchanger;
     
     @PostConstruct
-    void init() {
+    public void init(){
+        initSettings();
+        initExchange();
+        initBasket();
+ 
+    }        
+            
+    void initSettings() {
         PredefinedCasinoSetting[] defaultSettings = PredefinedCasinoSetting.values();
         for (PredefinedCasinoSetting defaultSetting : defaultSettings) {
             String settingName = defaultSetting.getSettingName();
@@ -35,6 +42,15 @@ public class CasinoInitializer {
                 settingsManager.setSettingFor(settingName, defaultSetting.getValue());
             }
         }
+    }
+    
+    private void initExchange(){
         exchanger.saveLatestExchangeToDatabase();
     }
+    
+    
+    private void initBasket(){
+    
+    }
+
 }
