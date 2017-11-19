@@ -12,17 +12,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 /**
  *
  * @author rafal
  */
 @Entity
+@SequenceGenerator(name = "basketLog_seq_generator", allocationSize = 20, 
+initialValue = 1, sequenceName = "basketLog_seq")
 public class BasketLog implements Serializable{
     
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="basketLog_seq_generator")
     private Long id;
     
     @ManyToOne

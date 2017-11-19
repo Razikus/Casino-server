@@ -12,17 +12,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 /**
  *
  * @author Adam
  */
 @Entity
+@SequenceGenerator(name = "walletLog_seq_generator", allocationSize = 20, 
+initialValue = 1, sequenceName = "walletLog_seq")
 public class WalletLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="walletLog_seq_generator")
     private Long id;
     
     @ManyToOne
