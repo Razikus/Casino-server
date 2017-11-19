@@ -15,17 +15,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 /**
  *
  * @author student
  */
 @Entity
+@SequenceGenerator(name = "wallet_seq_generator", allocationSize = 20, 
+initialValue = 1, sequenceName = "wallet_seq")
 public class Wallet implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="wallet_seq_generator")
     private Long id;
     
     @OneToMany(mappedBy = "wallet", fetch = FetchType.LAZY)

@@ -18,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 
 /**
@@ -25,12 +26,14 @@ import javax.persistence.Transient;
  * @author rafal
  */
 @Entity
+@SequenceGenerator(name = "basket_seq_generator", allocationSize = 20, 
+initialValue = 1, sequenceName = "basket_seq")
 public class Basket implements Serializable {
 
   
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "basket_seq_generator")
     private Long id;
     
     @OneToMany(mappedBy = "basket", fetch = FetchType.LAZY)

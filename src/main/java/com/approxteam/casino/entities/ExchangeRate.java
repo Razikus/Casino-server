@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -24,11 +25,13 @@ import javax.persistence.TemporalType;
  * @author Adam
  */
 @Entity
+@SequenceGenerator(name = "exchangeRate_seq_generator", allocationSize = 20, 
+initialValue = 1, sequenceName = "exchangeRate_seq")
 public class ExchangeRate implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="exchangeRate_seq_generator")
     private Long id;
 
     public Long getId() {
