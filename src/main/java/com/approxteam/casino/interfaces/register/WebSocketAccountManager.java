@@ -29,6 +29,7 @@ import org.apache.logging.log4j.LogManager;
 import com.approxteam.casino.interfaces.AccountManager;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.mailer.PasswordChangeMail;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -50,6 +51,9 @@ public class WebSocketAccountManager extends BasicBean implements AccountManager
     
     @Override
     public boolean register(String nickName, String password, String email){
+        if(StringUtils.isEmpty(nickName) || StringUtils.isEmpty(password) || StringUtils.isEmpty(email)) {
+            return false;
+        }
         Account account = new Account();
         account.setEmail(email);
         account.setPassword(password);
@@ -221,6 +225,10 @@ public class WebSocketAccountManager extends BasicBean implements AccountManager
 
     @Override
     public boolean generateAndSendPasswordChangeEmail(String email, String newPassword) {
+        if(StringUtils.isEmpty(email) || StringUtils.isEmpty(newPassword)) {
+            return false;
+        }
+        
         AccountPasswordRequest req = new AccountPasswordRequest();
         req.setAccount(findAccountByEmail(email));
         req.setToken(getRandomToken());
