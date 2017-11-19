@@ -8,8 +8,9 @@ package com.approxteam.casino;
 import com.approxteam.casino.generalLogic.CasinoUsersHandler;
 import com.approxteam.casino.generalLogic.PlayerHandler;
 import com.approxteam.casino.generalLogic.actions.Action;
-import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshMoneyState;
-import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayersState;
+import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayerMoneyState;
+import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayer;
+import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayerCountState;
 import com.approxteam.casino.interfaces.CasinoManager;
 import com.approxteam.casino.interfaces.Exchanger;
 import com.approxteam.casino.interfaces.Recognizer;
@@ -86,8 +87,7 @@ public class CasinoSocket {
     @Schedule(hour="*", minute="*", second = "*/10", persistent = false)
     public void refreshPlayers() {
         final int players = sessionHandler.getPlayers().size();
-        casinoManager.doOnEach(new RefreshPlayersState(players));
-        casinoManager.doOnEach(new RefreshMoneyState());
+        casinoManager.doOnEach(new RefreshPlayer(players));
         
         
     }
