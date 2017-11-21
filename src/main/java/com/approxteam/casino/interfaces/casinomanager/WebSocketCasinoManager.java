@@ -30,36 +30,10 @@ import javax.persistence.criteria.Root;
  */
 @Stateful
 public class WebSocketCasinoManager implements CasinoManager{
-    
-    @PersistenceContext(unitName = "casinoPU")
-    private EntityManager entityManager;
-    
+        
     @Inject
     private CasinoUsersHandler sessionHandler;
-    @Override
-    public boolean basketExists(){
-        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-        final Root<Basket> from = cq.from(Basket.class);
-        cq.select(cb.count(cq.from(Basket.class)));
-        return entityManager.createQuery(cq).getSingleResult() > 0;
-    }
-    @Override
-    public Basket getBasket(BasketType type){
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Basket> cq = cb.createQuery(Basket.class);
-        Root<Basket> basket = cq.from(Basket.class);
-        ParameterExpression<BasketType> basketType = cb.parameter(BasketType.class);
-        cq.select(basket).where(cb.equal(basket.get("BasketType"), basketType));
-        TypedQuery<Basket> q = entityManager.createQuery(cq);
-        q.setParameter(basketType, type);
-        try {
-            Basket result = q.getSingleResult();
-            return result;
-        } catch(Exception e) {
-            return null;
-        }    
-    }
+   
    
     @Override
     public void doActionOn(PlayerHandler player, Consumer<PlayerHandler> consumer) {

@@ -42,6 +42,7 @@ public class BasketInConsumer implements BiConsumer<PlayerHandler, Action> {
             if(basket != null){
                 if(checkPlayers(basket)){
                     if(basketInterface.addPlayerToBasket(basket, login)){
+                        walletInterface.decreaseAccountWalletBy(login, basket.getBid(), "BasketGame");
                         SessionUtils.serializeAndSendAsynchronously(t, new Response(ResponseType.OK));
                         
                     }
@@ -87,8 +88,8 @@ public class BasketInConsumer implements BiConsumer<PlayerHandler, Action> {
     }
     
     private Basket getBasket(BasketType type){
-        CasinoManager cm = ContextUtils.getCasinoManager();
-        Basket basket = cm.getBasket(type);
+        BasketInterface bi = ContextUtils.getBasketInterface();
+        Basket basket = bi.getBasket(type);
         if(basket == null){
             return null;
         }

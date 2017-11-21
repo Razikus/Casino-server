@@ -6,6 +6,7 @@
 package com.approxteam.casino.interfaces;
 
 import com.approxteam.casino.entities.Basket;
+import com.approxteam.casino.enums.BasketType;
 import javax.ejb.Remote;
 
 /**
@@ -14,6 +15,8 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface BasketInterface {
+    public Basket getBasket(BasketType type);
+    public boolean basketExists();
     public boolean makeBasketLog(Basket b , String nickname);
     public boolean addPlayerToBasket(Basket b, String nickname);
     public void removeBasket(Basket b);

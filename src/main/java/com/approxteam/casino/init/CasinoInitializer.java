@@ -7,6 +7,7 @@ package com.approxteam.casino.init;
 
 import com.approxteam.casino.entities.Basket;
 import com.approxteam.casino.enums.BasketType;
+import com.approxteam.casino.interfaces.BasketInterface;
 import com.approxteam.casino.interfaces.CasinoManager;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import com.approxteam.casino.interfaces.Exchanger;
@@ -29,7 +30,7 @@ public class CasinoInitializer {
     private EntityManager entityManager;
     
     @EJB
-    private CasinoManager casinoManager;
+    private BasketInterface basketInterface;
     
     @EJB
     private CasinoSettingsManager settingsManager;
@@ -61,7 +62,7 @@ public class CasinoInitializer {
     
     
     private void initBasket(){
-        if(!casinoManager.basketExists()){
+        if(!basketInterface.basketExists()){
             Basket b = new Basket();
             b.setPlayersCount(0);
             b.setBid(settingsManager.getDoubleSettingFor(PredefinedCasinoSetting.BASKET_STANDARD_BID.getSettingName()).get());
