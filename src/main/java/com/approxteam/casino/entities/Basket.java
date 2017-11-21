@@ -10,6 +10,7 @@ import com.approxteam.casino.init.PredefinedCasinoSetting;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
 import javax.persistence.Transient;
 
 /**
@@ -29,7 +31,7 @@ import javax.persistence.Transient;
 @SequenceGenerator(name = "basket_seq_generator", allocationSize = 20, 
 initialValue = 1, sequenceName = "basket_seq")
 public class Basket implements Serializable {
-
+    
   
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,6 +41,9 @@ public class Basket implements Serializable {
     @OneToMany(mappedBy = "basket", fetch = FetchType.LAZY)
     private List<BasketLog> basketLogs = new ArrayList<>();
     
+       
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateCreated = new Date();
     
     @Column(nullable = false)
     private Double bid;
@@ -104,6 +109,20 @@ public class Basket implements Serializable {
         } else {
             this.basketLogs = basketLogs;
         }
+    }
+
+    /**
+     * @return the dateCreated
+     */
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    /**
+     * @param dateCreated the dateCreated to set
+     */
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
     
     

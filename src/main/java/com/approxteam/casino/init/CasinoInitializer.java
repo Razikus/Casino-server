@@ -5,12 +5,16 @@
  */
 package com.approxteam.casino.init;
 
+import com.approxteam.casino.entities.Basket;
+import com.approxteam.casino.interfaces.CasinoManager;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import com.approxteam.casino.interfaces.Exchanger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -19,6 +23,12 @@ import javax.ejb.Startup;
 @Singleton
 @Startup
 public class CasinoInitializer {
+    
+    @PersistenceContext(unitName = "casinoPU")
+    private EntityManager entityManager;
+    
+    @EJB
+    private CasinoManager casinoManager;
     
     @EJB
     private CasinoSettingsManager settingsManager;
@@ -50,6 +60,15 @@ public class CasinoInitializer {
     
     
     private void initBasket(){
+        if(!casinoManager.basketExists()){
+            Basket b = new Basket();
+            b.setPlayersCount(0);
+            b.setBid(settingsManager.getDoubleSettingFor(PredefinedCasinoSetting.BASKET_STANDARD_BID.getSettingName()).get());
+            b.setCapacity(settingsManager.getIntegerSettingFor(PredefinedCasinoSetting.BASKET_STANDARD_CAPACITY.getSettingName()).get());
+            b.setPlayersCount(0);
+            entityManager.persist(b);
+            entityManager.flush();           
+        }
     
     }
 

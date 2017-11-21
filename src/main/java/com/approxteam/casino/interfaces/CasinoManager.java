@@ -17,6 +17,9 @@ import javax.ejb.Remote;
 @Remote
 public interface CasinoManager {
 
+    //Check if any instance of basket is in databse
+    public boolean basketExists();
+    
     /**
      *
      * @param player - which player
