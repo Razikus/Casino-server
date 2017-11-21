@@ -33,6 +33,7 @@ public class WebSocketRandomManager implements RandomManager{
         return random.nextDouble() < chance;
     }
     
+    
     @Override
     public boolean win(PredefinedCasinoSetting setting) throws SettingNotFoundException {
         SerializableOptional<Double> value = settingsManager.getDoubleSettingFor(setting.getSettingName());
@@ -51,6 +52,11 @@ public class WebSocketRandomManager implements RandomManager{
         } else {
             return win(value.get());
         }
+    }
+    
+    @Override
+    public int getNumberFromBound(int high){
+        return random.nextInt(high);
     }
     
 }

@@ -21,7 +21,8 @@ public enum ActionType implements Serializable {
     ACCOUNTACTIVATION(ActionConsumer.ACCOUNTACTIVATION),
     PASSWORDCHANGEREQUEST(ActionConsumer.PASSWORDCHANGEREQUEST),
     PASSWORDCHANGE(ActionConsumer.PASSWORDCHANGE),
-    GUNFIRE(ActionConsumer.GUNFIRE);
+    GUNFIRE(ActionConsumer.GUNFIRE),
+    BASKET(ActionConsumer.BASKET);
     
     private ObjectMapper mapper = new ObjectMapper();
     private ActionConsumer consumer;

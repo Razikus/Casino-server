@@ -5,6 +5,8 @@
  */
 package com.approxteam.casino.interfaces;
 
+import com.approxteam.casino.entities.Basket;
+import com.approxteam.casino.enums.BasketType;
 import com.approxteam.casino.generalLogic.PlayerHandler;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -16,7 +18,9 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface CasinoManager {
-
+    
+    public Basket getBasket(BasketType type);
+    
     //Check if any instance of basket is in databse
     public boolean basketExists();
     

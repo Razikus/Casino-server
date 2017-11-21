@@ -5,7 +5,9 @@
  */
 package com.approxteam.casino.interfaces.casinomanager;
 
+import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.Basket;
+import com.approxteam.casino.enums.BasketType;
 import com.approxteam.casino.generalLogic.CasinoUsersHandler;
 import com.approxteam.casino.generalLogic.PlayerHandler;
 import com.approxteam.casino.interfaces.CasinoManager;
@@ -19,6 +21,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 
 /**
@@ -33,7 +36,6 @@ public class WebSocketCasinoManager implements CasinoManager{
     
     @Inject
     private CasinoUsersHandler sessionHandler;
-
     @Override
     public boolean basketExists(){
         final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -42,7 +44,23 @@ public class WebSocketCasinoManager implements CasinoManager{
         cq.select(cb.count(cq.from(Basket.class)));
         return entityManager.createQuery(cq).getSingleResult() > 0;
     }
-    
+    @Override
+    public Basket getBasket(BasketType type){
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Basket> cq = cb.createQuery(Basket.class);
+        Root<Basket> basket = cq.from(Basket.class);
+        ParameterExpression<BasketType> basketType = cb.parameter(BasketType.class);
+        cq.select(basket).where(cb.equal(basket.get("BasketType"), basketType));
+        TypedQuery<Basket> q = entityManager.createQuery(cq);
+        q.setParameter(basketType, type);
+        try {
+            Basket result = q.getSingleResult();
+            return result;
+        } catch(Exception e) {
+            return null;
+        }    
+    }
+   
     @Override
     public void doActionOn(PlayerHandler player, Consumer<PlayerHandler> consumer) {
         consumer.accept(player);

@@ -20,5 +20,5 @@ public interface RandomManager {
     public boolean win(Double chance);
     public boolean win(PredefinedCasinoSetting setting) throws SettingNotFoundException;
     public boolean win(String setting) throws SettingNotFoundException;
-    
+    public int getNumberFromBound(int high);
 }

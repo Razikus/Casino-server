@@ -6,6 +6,7 @@
 package com.approxteam.casino.interfaces.casinoSettingsManager;
 
 import com.approxteam.casino.entities.CasinoSetting;
+import com.approxteam.casino.enums.BasketType;
 import com.approxteam.casino.generalLogic.actions.utils.SerializableOptional;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
@@ -68,6 +69,7 @@ public class WebSocketCasinoSettingsManagerTest {
                 .addClass(CasinoSettingsManager.class)
                 .addClass(WebSocketCasinoSettingsManager.class)
                 .addClass(BasicBean.class)
+                .addClass(BasketType.class)
                 .addClass(SerializationTest.class)
                 .addClass(Currency.class)
                 .addClass(SerializableOptional.class)

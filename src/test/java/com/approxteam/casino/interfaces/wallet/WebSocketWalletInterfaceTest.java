@@ -9,6 +9,7 @@ import com.approxteam.casino.configuration.PropertiesBuilder;
 import com.approxteam.casino.configuration.PropertyComment;
 import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.Wallet;
+import com.approxteam.casino.enums.BasketType;
 import com.approxteam.casino.generalLogic.ContextUtils;
 import com.approxteam.casino.interfaces.AccountManager;
 import com.approxteam.casino.interfaces.BasicBean;
@@ -79,6 +80,7 @@ public class WebSocketWalletInterfaceTest {
                 .addClass(Mailer.class)
                 .addClass(WebSocketMailer.class)
                 .addClass(MailWrapper.class)
+                .addClass(BasketType.class)
                 .addClass(ActivationMail.class)
                 .addClass(PasswordChangeMail.class)
                 .addClass(ContextUtils.class)

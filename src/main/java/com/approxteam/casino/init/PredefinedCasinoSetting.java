@@ -5,6 +5,7 @@
  */
 package com.approxteam.casino.init;
 
+import com.approxteam.casino.enums.BasketType;
 import java.io.Serializable;
 
 /**
@@ -20,7 +21,8 @@ public enum PredefinedCasinoSetting {
     BASKET_STANDARD_BID(50),
     BASKET_STANDARD_CAPACITY(1000),
     BASKET_RANDOMIZER("TRUE"),
-    BASKET_RANDOMIZER_VALUE(0.30);
+    BASKET_RANDOMIZER_VALUE(0.30),
+    BASIC_BASKET_TYPE(BasketType.Basic.name());
 
     private String settingName;
     private Serializable value;

@@ -6,6 +6,7 @@
 package com.approxteam.casino.interfaces.randomManager;
 
 import com.approxteam.casino.entities.CasinoSetting;
+import com.approxteam.casino.enums.BasketType;
 import com.approxteam.casino.exceptions.SettingNotFoundException;
 import com.approxteam.casino.generalLogic.actions.utils.SerializableOptional;
 import com.approxteam.casino.init.PredefinedCasinoSetting;
@@ -70,6 +71,7 @@ public class WebSocketRandomManagerTest {
                 .addClass(RandomManager.class)
                 .addClass(WebSocketRandomManager.class)
                 .addClass(CasinoSettingsManager.class)
+                .addClass(BasketType.class)
                 .addClass(WebSocketCasinoSettingsManager.class)
                 .addClass(PredefinedCasinoSetting.class)
                 .addClass(BasicBean.class)

@@ -6,6 +6,7 @@
 package com.approxteam.casino.init;
 
 import com.approxteam.casino.entities.Basket;
+import com.approxteam.casino.enums.BasketType;
 import com.approxteam.casino.interfaces.CasinoManager;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import com.approxteam.casino.interfaces.Exchanger;
@@ -66,6 +67,7 @@ public class CasinoInitializer {
             b.setBid(settingsManager.getDoubleSettingFor(PredefinedCasinoSetting.BASKET_STANDARD_BID.getSettingName()).get());
             b.setCapacity(settingsManager.getIntegerSettingFor(PredefinedCasinoSetting.BASKET_STANDARD_CAPACITY.getSettingName()).get());
             b.setPlayersCount(0);
+            b.setBasketType(BasketType.valueOf(settingsManager.getStringSettingFor(PredefinedCasinoSetting.BASIC_BASKET_TYPE.getSettingName()).get()));
             entityManager.persist(b);
             entityManager.flush();           
         }

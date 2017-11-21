@@ -51,6 +51,20 @@ public class BasketLog implements Serializable{
         this.basket = basket;
     }
 
+    /**
+     * @return the login
+     */
+    public String getLogin() {
+        return login;
+    }
+
+    /**
+     * @param login the login to set
+     */
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
  
     
     

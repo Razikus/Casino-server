@@ -40,4 +40,8 @@ public abstract class BasicBean {
         }
         return true;
     }
+    
+    public void remove(Object o) {
+        entityManager.remove(o);
+    }
 }

@@ -18,7 +18,8 @@ public enum ActionParameter {
     NICKNAME("nickname", String.class),
     NEWPASSWORD("newPassword", String.class),
     CHECKED("checked", Boolean.class),
-    BID("bid", Double.class);
+    BID("bid", Double.class),
+    BASKET_TYPE("basketType",String.class);
     
     private String name;
     private Class expectedClass;

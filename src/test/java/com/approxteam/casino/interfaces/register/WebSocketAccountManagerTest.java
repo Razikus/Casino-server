@@ -11,6 +11,7 @@ import com.approxteam.casino.entities.Account;
 import com.approxteam.casino.entities.AccountActivation;
 import com.approxteam.casino.entities.AccountPasswordRequest;
 import com.approxteam.casino.entities.Wallet;
+import com.approxteam.casino.enums.BasketType;
 import com.approxteam.casino.generalLogic.ContextUtils;
 import com.approxteam.casino.interfaces.AccountManager;
 import com.approxteam.casino.interfaces.BasicBean;
@@ -84,6 +85,7 @@ public class WebSocketAccountManagerTest {
                 .addClass(ActivationMail.class)
                 .addClass(PasswordChangeMail.class)
                 .addClass(ContextUtils.class)
+                .addClass(BasketType.class)
                 .addClass(PropertiesBuilder.class)
                 .addClass(PropertyComment.class)
                 .addClass(BasicBean.class)

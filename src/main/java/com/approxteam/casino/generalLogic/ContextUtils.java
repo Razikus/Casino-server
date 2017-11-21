@@ -11,10 +11,12 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import org.apache.logging.log4j.LogManager;
 import com.approxteam.casino.interfaces.AccountManager;
+import com.approxteam.casino.interfaces.BasketInterface;
 import com.approxteam.casino.interfaces.CasinoManager;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import com.approxteam.casino.interfaces.RandomManager;
 import com.approxteam.casino.interfaces.WalletInterface;
+import com.approxteam.casino.interfaces.basket.WebSocketBasketInterface;
 import com.approxteam.casino.interfaces.casinoSettingsManager.WebSocketCasinoSettingsManager;
 import com.approxteam.casino.interfaces.casinomanager.WebSocketCasinoManager;
 import com.approxteam.casino.interfaces.mailer.WebSocketMailer;
@@ -59,6 +61,10 @@ public class ContextUtils {
     
     public static WalletInterface getWalletInterface() {
         return getBean(WalletInterface.class, WebSocketWalletInterface.class);
+    }
+    
+    public static BasketInterface getBasketInterface() {
+        return getBean(BasketInterface.class, WebSocketBasketInterface.class);
     }
     
     public static RandomManager getRandomManager() {

@@ -15,6 +15,7 @@ public enum WebClientActionType implements Serializable {
     REFRESHUSERS(),
     GUN_FIRE_RESPONSE(),
     CHANGE_STATE(),
-    REFRESHMONEY();
+    REFRESHMONEY(),
+    BASKET_RESULT();
     
 }

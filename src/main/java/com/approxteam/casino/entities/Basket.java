@@ -5,6 +5,7 @@
  */
 package com.approxteam.casino.entities;
 
+import com.approxteam.casino.enums.BasketType;
 import com.approxteam.casino.generalLogic.ContextUtils;
 import com.approxteam.casino.init.PredefinedCasinoSetting;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
@@ -43,7 +44,7 @@ public class Basket implements Serializable {
     
        
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dateCreated = new Date();
+    private Date created = new Date();
     
     @Column(nullable = false)
     private Double bid;
@@ -54,7 +55,8 @@ public class Basket implements Serializable {
     @Column(nullable = false)
     private Integer playersCount = 0;
     
-    
+    @Column(nullable = false)
+    private BasketType basketType;
     
     public Long getId() {
         return id;
@@ -115,14 +117,28 @@ public class Basket implements Serializable {
      * @return the dateCreated
      */
     public Date getDateCreated() {
-        return dateCreated;
+        return created;
     }
 
     /**
      * @param dateCreated the dateCreated to set
      */
     public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
+        this.created = dateCreated;
+    }
+
+    /**
+     * @return the basketType
+     */
+    public BasketType getBasketType() {
+        return basketType;
+    }
+
+    /**
+     * @param basketType the basketType to set
+     */
+    public void setBasketType(BasketType basketType) {
+        this.basketType = basketType;
     }
     
     
