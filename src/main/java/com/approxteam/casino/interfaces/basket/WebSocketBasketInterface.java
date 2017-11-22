@@ -14,6 +14,7 @@ import com.approxteam.casino.init.PredefinedCasinoSetting;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.BasketInterface;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -26,6 +27,7 @@ import javax.persistence.criteria.Root;
  *
  * @author rafal
  */
+@Stateless
 public class WebSocketBasketInterface extends BasicBean implements BasketInterface{
     @PersistenceContext(unitName = "casinoPU")
     private EntityManager entityManager;
