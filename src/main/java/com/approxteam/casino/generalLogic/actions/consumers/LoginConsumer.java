@@ -17,10 +17,13 @@ import com.approxteam.casino.generalLogic.actions.SessionUtils;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
 import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayerMoneyState;
+import com.approxteam.casino.generalLogic.actions.webClient.consumers.AccountInformationAction;
 import com.approxteam.casino.generalLogic.actions.webClient.consumers.ChangeState;
 import java.util.List;
 import java.util.function.BiConsumer;
 import com.approxteam.casino.interfaces.AccountManager;
+import java.util.Date;
+import java.util.Optional;
 
 /**
  *
@@ -32,25 +35,25 @@ public class LoginConsumer implements BiConsumer<PlayerHandler, Action> {
         AccountManager bean = ContextUtils.getAccountManager();
         String login = ArgUtils.getParameterString(u, ActionParameter.LOGIN);
         Account player = bean.findAccount(login);
-        Response response = getProperlyResponse(player, ArgUtils.getParameterString(u, ActionParameter.PASSWORD));
+        if(player == null) {
+            SessionUtils.serializeAndSendAsynchronously(t, Response.of(ResponseType.LOGINERROR_BADLOGINORPASSWORD));
+            return;
+        }
+        Optional<Date> activated = getDateActivated(player.getAccountActivations());
+        if(!activated.isPresent()) {
+            SessionUtils.serializeAndSendAsynchronously(t, Response.of(ResponseType.NOTACTIVATED));
+            return;
+        }
+        
+        Response response = Response.of(ResponseType.LOGINOK);
         if(response.getType().equals(ResponseType.LOGINOK)) {
             t.setNickname(player.getNickname());
             t.switchState(PlayerState.LOGGED);
             new ChangeState(PlayerState.LOGGED).accept(t);
             new RefreshPlayerMoneyState().accept(t);
+            new AccountInformationAction(player.getNickname(), player.getEmail(), activated.get().toString()).accept(t);
         }
         SessionUtils.serializeAndSendAsynchronously(t, response);
-    }
-    
-    private Response getProperlyResponse(Account player, String password) {
-        if(player != null && player.getPassword().equals(password)) {
-            if(!isActivated(player.getAccountActivations())) {
-                return Response.of(ResponseType.NOTACTIVATED);
-            }
-            return Response.of(ResponseType.LOGINOK);
-        } else {
-            return Response.of(ResponseType.LOGINERROR_BADLOGINORPASSWORD);
-        }
     }
     
     private boolean isActivated(List<AccountActivation> activations) {
@@ -60,5 +63,14 @@ public class LoginConsumer implements BiConsumer<PlayerHandler, Action> {
             }
         }
         return false;
+    }
+    
+    private Optional<Date> getDateActivated(List<AccountActivation> activations) {
+        for(AccountActivation activation: activations) {
+            if(activation.isActivated()) {
+                return Optional.of(activation.getDateActivated());
+            }
+        }
+        return Optional.empty();
     }
 }

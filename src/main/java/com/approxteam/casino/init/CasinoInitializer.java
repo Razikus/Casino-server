@@ -8,7 +8,6 @@ package com.approxteam.casino.init;
 import com.approxteam.casino.entities.Basket;
 import com.approxteam.casino.enums.BasketType;
 import com.approxteam.casino.interfaces.BasketInterface;
-import com.approxteam.casino.interfaces.CasinoManager;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
 import com.approxteam.casino.interfaces.Exchanger;
 import javax.annotation.PostConstruct;

@@ -30,7 +30,6 @@ public class GunResponse extends CasinoConsumer {
     @Override
     public void accept(PlayerHandler t) {
         WebClientAction action = WebClientAction.of(WebClientActionType.GUN_FIRE_RESPONSE, SerializableEntry.of("win", win), SerializableEntry.of("howMany", howMany));
-        System.out.println("asdasdasdasdasdacceptacceptacceptacceptasdasdsadasd");
         SessionUtils.serializeAndSendAsynchronously(t, action);
     }
     
