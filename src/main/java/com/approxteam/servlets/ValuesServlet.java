@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author rafal
  */
-@WebServlet("/values")
+@WebServlet("/view/values")
 public class ValuesServlet extends HttpServlet {
 
     @EJB
@@ -55,7 +55,7 @@ public class ValuesServlet extends HttpServlet {
             ++i;
         }
         request.setAttribute("settings",settings);              
-        request.getRequestDispatcher("/WEB-INF/view/values.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/valueslist.jsp").forward(request, response);
     }
 
     @Override

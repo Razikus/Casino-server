@@ -23,7 +23,7 @@
         </br>
     </td>
     </c:forEach>
-      <form action="${pageContext.request.contextPath}/change" method="post">
+      <form action="${pageContext.request.contextPath}/view/change" method="post">
 	<p>Name of setting:</p>
 	<input type="text" name="setting" maxlength="30">
 	<p>New Value:</p>
