@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,7 +40,7 @@ public class Basket implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "basket_seq_generator")
     private Long id;
     
-    @OneToMany(mappedBy = "basket", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "basket", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<BasketLog> basketLogs = new ArrayList<>();
     
        
@@ -57,6 +58,8 @@ public class Basket implements Serializable {
     
     @Column(nullable = false)
     private BasketType basketType;
+    
+    private boolean active = true;
     
     public Long getId() {
         return id;
@@ -113,6 +116,19 @@ public class Basket implements Serializable {
         }
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    
     /**
      * @return the dateCreated
      */

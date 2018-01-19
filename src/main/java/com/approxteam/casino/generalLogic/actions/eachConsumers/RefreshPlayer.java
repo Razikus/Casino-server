@@ -5,14 +5,7 @@
  */
 package com.approxteam.casino.generalLogic.actions.eachConsumers;
 
-import com.approxteam.casino.entities.Account;
-import com.approxteam.casino.generalLogic.ContextUtils;
 import com.approxteam.casino.generalLogic.PlayerHandler;
-import com.approxteam.casino.generalLogic.actions.SerializableEntry;
-import com.approxteam.casino.generalLogic.actions.SessionUtils;
-import com.approxteam.casino.generalLogic.actions.webClient.WebClientAction;
-import com.approxteam.casino.generalLogic.actions.webClient.WebClientActionType;
-import com.approxteam.casino.interfaces.AccountManager;
 
 /**
  *
@@ -21,16 +14,24 @@ import com.approxteam.casino.interfaces.AccountManager;
 public class RefreshPlayer extends CasinoConsumer{
 
     private int players;
-
-    public RefreshPlayer(int players) {
-        this.players = players;
-    }
     
+    private double basketBid;
+    private double basketNow;
+    private double basketCap;
+
+    public RefreshPlayer(int players, double basketBid, double basketNow, double basketCap) {
+        this.players = players;
+        this.basketBid = basketBid;
+        this.basketNow = basketNow;
+        this.basketCap = basketCap;
+    }
+
     
     @Override
     public void accept(PlayerHandler t) {
         new RefreshPlayerCountState(players).accept(t);
         new RefreshPlayerMoneyState().accept(t);
+        new RefreshPlayerBasketState(basketNow, basketBid, basketCap).accept(t);
     }
     
 }

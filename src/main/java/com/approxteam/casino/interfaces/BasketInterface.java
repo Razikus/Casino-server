@@ -19,6 +19,11 @@ public interface BasketInterface {
     public boolean basketExists();
     public boolean makeBasketLog(Basket b , String nickname);
     public boolean addPlayerToBasket(Basket b, String nickname);
-    public void removeBasket(Basket b);
+    public void setInactive(Basket b);
     public boolean makeNewBasket();
+    public String getRandomWinner(Basket basket);
+        
+    public double getMultipledCapacity(BasketType type);
+    public double getActualMultipledCapacity(BasketType type);
+    
 }

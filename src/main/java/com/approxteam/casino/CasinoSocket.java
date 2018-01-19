@@ -5,12 +5,14 @@
  */
 package com.approxteam.casino;
 
+import com.approxteam.casino.enums.BasketType;
 import com.approxteam.casino.generalLogic.CasinoUsersHandler;
 import com.approxteam.casino.generalLogic.PlayerHandler;
 import com.approxteam.casino.generalLogic.actions.Action;
 import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayerMoneyState;
 import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayer;
 import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayerCountState;
+import com.approxteam.casino.interfaces.BasketInterface;
 import com.approxteam.casino.interfaces.CasinoManager;
 import com.approxteam.casino.interfaces.Exchanger;
 import com.approxteam.casino.interfaces.Recognizer;
@@ -50,6 +52,9 @@ public class CasinoSocket {
     private CasinoManager casinoManager;
     
     @EJB
+    private BasketInterface basketManager;
+    
+    @EJB
     Exchanger exchanger;
     
     
@@ -87,7 +92,10 @@ public class CasinoSocket {
     @Schedule(hour="*", minute="*", second = "*/10", persistent = false)
     public void refreshPlayers() {
         final int players = sessionHandler.getPlayers().size();
-        casinoManager.doOnEach(new RefreshPlayer(players));
+        double now = basketManager.getActualMultipledCapacity(BasketType.Basic);
+        double cap = basketManager.getMultipledCapacity(BasketType.Basic);
+        double bid = basketManager.getBasket(BasketType.Basic).getBid();
+        casinoManager.doOnEach(new RefreshPlayer(players, bid, now, cap));
         
         
     }
