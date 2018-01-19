@@ -39,7 +39,7 @@ public class Exchange implements Serializable {
         this.rates = new HashMap<>();
     }
 
-    private Optional<Double> getActualFor(Currency currency) {
+    public Optional<Double> getActualFor(Currency currency) {
         return Optional.of(rates.get(currency));
     }
     
