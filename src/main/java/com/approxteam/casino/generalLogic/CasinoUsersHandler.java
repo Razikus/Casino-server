@@ -27,9 +27,10 @@ public class CasinoUsersHandler {
     
     private Map<Session, PlayerHandler> sessions = new HashMap<>();
     
-    public void addSession(Session session) {
+    public PlayerHandler addSession(Session session) {
         PlayerHandler player = new PlayerHandler(session);
         sessions.put(session, player);
+        return player;
     }
     
     public void removeSession(Session session) {

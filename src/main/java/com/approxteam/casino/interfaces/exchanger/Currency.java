@@ -46,4 +46,5 @@ public enum Currency implements Serializable{
     ZAR;
     
     
+    
 }

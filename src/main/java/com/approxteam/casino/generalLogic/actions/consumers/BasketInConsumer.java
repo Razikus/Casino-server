@@ -41,10 +41,10 @@ public class BasketInConsumer implements BiConsumer<PlayerHandler, Action> {
             Basket basket = getBasket(type);
             if(basket != null){
                 if(checkPlayers(basket)){
-                    if(basketInterface.addPlayerToBasket(basket, login)){
-                        walletInterface.decreaseAccountWalletBy(login, basket.getBid(), "BasketGame");
+                    if(walletInterface.decreaseAccountWalletBy(login, basket.getBid(), "BasketGame") && basketInterface.addPlayerToBasket(basket, login)){
                         SessionUtils.serializeAndSendAsynchronously(t, new Response(ResponseType.OK));
-                        
+                    } else {
+                        SessionUtils.serializeAndSendAsynchronously(t, new Response(ResponseType.WALLET_NOT_ENOUGH_MONEY));
                     }
                 }
             }
@@ -56,19 +56,12 @@ public class BasketInConsumer implements BiConsumer<PlayerHandler, Action> {
         Basket basket = getBasket(type);
         if(basket != null){
             if(basket.getPlayersCount() >=  basket.getCapacity()){
-                ArrayList<BasketLog> listaLogow = new ArrayList<BasketLog>(basket.getBasketLogs());
-                int index = randomManager.getNumberFromBound(listaLogow.size());
-                BasketLog log = listaLogow.get(index);
-                String nickname = log.getLogin();
-                walletInterface.increaseAccountWalletBy(nickname, 1000000 , "Busket Game Win");
-                basketInterface.removeBasket(basket);
+                String nickname = basketInterface.getRandomWinner(basket);
+                walletInterface.increaseAccountWalletBy(nickname, 49000 , "Basket Game Win");
+                basketInterface.setInactive(basket);
                 basketInterface.makeNewBasket();               
             }
         }
-        
-        
-               
-
     }
     
     private boolean checkPlayers(Basket t){

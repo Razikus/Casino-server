@@ -60,8 +60,9 @@ public class CasinoSocket {
     
     @OnOpen
     public void open(Session session) {
-        sessionHandler.addSession(session);
+        PlayerHandler player = sessionHandler.addSession(session);
         log.info(session.getId() + " connected to casino (+)");
+        casinoManager.doOnEach(getRefresher());
         
     }   
     @OnClose
@@ -95,9 +96,15 @@ public class CasinoSocket {
         double now = basketManager.getActualMultipledCapacity(BasketType.Basic);
         double cap = basketManager.getMultipledCapacity(BasketType.Basic);
         double bid = basketManager.getBasket(BasketType.Basic).getBid();
-        casinoManager.doOnEach(new RefreshPlayer(players, bid, now, cap));
-        
-        
+        casinoManager.doOnEach(getRefresher());
+    }
+    
+    public RefreshPlayer getRefresher() {
+        final int players = sessionHandler.getPlayers().size();
+        double now = basketManager.getActualMultipledCapacity(BasketType.Basic);
+        double cap = basketManager.getMultipledCapacity(BasketType.Basic);
+        double bid = basketManager.getBasket(BasketType.Basic).getBid();
+        return new RefreshPlayer(players, bid, now, cap);
     }
     
     @Schedule(hour="*/12", persistent = false)

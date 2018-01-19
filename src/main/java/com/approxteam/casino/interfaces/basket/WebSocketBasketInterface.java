@@ -14,6 +14,8 @@ import com.approxteam.casino.init.PredefinedCasinoSetting;
 import com.approxteam.casino.interfaces.BasicBean;
 import com.approxteam.casino.interfaces.BasketInterface;
 import com.approxteam.casino.interfaces.CasinoSettingsManager;
+import com.approxteam.casino.interfaces.RandomManager;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,6 +24,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
+import org.hibernate.Hibernate;
 
 /**
  *
@@ -31,6 +34,9 @@ import javax.persistence.criteria.Root;
 public class WebSocketBasketInterface extends BasicBean implements BasketInterface{
     @PersistenceContext(unitName = "casinoPU")
     private EntityManager entityManager;
+    
+    @EJB
+    private RandomManager randomManager;
     
     
     @Override
@@ -45,6 +51,9 @@ public class WebSocketBasketInterface extends BasicBean implements BasketInterfa
 
     @Override
     public boolean addPlayerToBasket(Basket t, String nickname) {
+       if(!t.isActive()) {
+           return false;
+       }
        makeBasketLog(t, nickname);
        t.setPlayersCount(t.getPlayersCount() + 1);
        return(merge(t));          
@@ -62,8 +71,10 @@ public class WebSocketBasketInterface extends BasicBean implements BasketInterfa
         return save(b);
     }
     
-    public void removeBasket(Basket b){
-        remove(b);
+    @Override
+    public void setInactive(Basket b){
+        b.setActive(false);
+        merge(b);
     }
 
     @Override
@@ -72,7 +83,7 @@ public class WebSocketBasketInterface extends BasicBean implements BasketInterfa
         CriteriaQuery<Basket> cq = cb.createQuery(Basket.class);
         Root<Basket> basket = cq.from(Basket.class);
         ParameterExpression<BasketType> basketType = cb.parameter(BasketType.class);
-        cq.select(basket).where(cb.equal(basket.get("basketType"), basketType));
+        cq.select(basket).where(cb.and(cb.equal(basket.get("basketType"), basketType), cb.equal(basket.get("active"), true)));
         cq.orderBy(cb.desc(basket.get("created")));
         TypedQuery<Basket> q = entityManager.createQuery(cq);
         q.setParameter(basketType, type);
@@ -91,6 +102,33 @@ public class WebSocketBasketInterface extends BasicBean implements BasketInterfa
         final Root<Basket> from = cq.from(Basket.class);
         cq.select(cb.count(cq.from(Basket.class)));
         return entityManager.createQuery(cq).getSingleResult() > 0;
+    }
+
+    @Override
+    public String getRandomWinner(Basket basket) {
+        if(basket == null) {
+            return null;
+        }
+        int size = basket.getBasketLogs().size();
+        
+        int rand = randomManager.getNumberFromBound(size);
+        
+        return basket.getBasketLogs().get(rand).getLogin();
+        
+    }
+
+    @Override
+    public double getMultipledCapacity(BasketType type) {
+        Basket b = getBasket(type);
+        return b.getCapacity() * b.getBid();
+    }
+
+    @Override
+    public double getActualMultipledCapacity(BasketType type) {
+        Basket b = getBasket(type);
+        
+        return b.getPlayersCount() * b.getBid();
+        
     }
     
 }
