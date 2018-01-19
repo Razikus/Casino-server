@@ -70,6 +70,8 @@ public class GunFireConsumer implements BiConsumer<PlayerHandler, Action>  {
                 Logger.getLogger(GunFireConsumer.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
+            response = Response.of(ResponseType.WALLET_NOT_ENOUGH_MONEY);
+            SessionUtils.serializeAndSendAsynchronously(t, response);
             log.info("Cannot decrease account wallet");
         }
 

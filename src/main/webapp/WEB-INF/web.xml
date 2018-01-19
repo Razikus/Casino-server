@@ -10,11 +10,11 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ValuesServlet</servlet-name>
-        <url-pattern>/admin/values</url-pattern>
+        <url-pattern>/view/values</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ChangeValueServlet</servlet-name>
-        <url-pattern>/admin/change</url-pattern>
+        <url-pattern>/view/change</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
