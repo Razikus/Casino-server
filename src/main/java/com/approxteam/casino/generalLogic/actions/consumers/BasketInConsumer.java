@@ -60,7 +60,7 @@ public class BasketInConsumer implements BiConsumer<PlayerHandler, Action> {
                 int index = randomManager.getNumberFromBound(listaLogow.size());
                 BasketLog log = listaLogow.get(index);
                 String nickname = log.getLogin();
-                walletInterface.increaseAccountWalletBy("login", 1000000 , "Busket Game Win");
+                walletInterface.increaseAccountWalletBy(nickname, 1000000 , "Busket Game Win");
                 basketInterface.removeBasket(basket);
                 basketInterface.makeNewBasket();               
             }

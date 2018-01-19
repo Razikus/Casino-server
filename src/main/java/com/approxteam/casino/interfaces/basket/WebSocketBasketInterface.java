@@ -45,6 +45,7 @@ public class WebSocketBasketInterface extends BasicBean implements BasketInterfa
 
     @Override
     public boolean addPlayerToBasket(Basket t, String nickname) {
+       makeBasketLog(t, nickname);
        t.setPlayersCount(t.getPlayersCount() + 1);
        return(merge(t));          
     }
