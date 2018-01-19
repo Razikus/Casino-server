@@ -71,7 +71,7 @@ public class WebSocketBasketInterface extends BasicBean implements BasketInterfa
         CriteriaQuery<Basket> cq = cb.createQuery(Basket.class);
         Root<Basket> basket = cq.from(Basket.class);
         ParameterExpression<BasketType> basketType = cb.parameter(BasketType.class);
-        cq.select(basket).where(cb.equal(basket.get("BasketType"), basketType));
+        cq.select(basket).where(cb.equal(basket.get("basketType"), basketType));
         cq.orderBy(cb.desc(basket.get("created")));
         TypedQuery<Basket> q = entityManager.createQuery(cq);
         q.setParameter(basketType, type);
