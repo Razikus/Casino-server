@@ -17,6 +17,7 @@ import com.approxteam.casino.generalLogic.actions.SessionUtils;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ActionParameter;
 import com.approxteam.casino.generalLogic.actions.argsUtils.ArgUtils;
 import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayerBasketState;
+import com.approxteam.casino.generalLogic.actions.eachConsumers.RefreshPlayerMoneyState;
 import com.approxteam.casino.generalLogic.actions.webClient.consumers.BasketResult;
 import com.approxteam.casino.interfaces.BasketInterface;
 import com.approxteam.casino.interfaces.CasinoManager;
@@ -48,6 +49,7 @@ public class BasketInConsumer implements BiConsumer<PlayerHandler, Action> {
                         double cap = basketInterface.getMultipledCapacity(BasketType.Basic);
                         double bid = basketInterface.getBasket(BasketType.Basic).getBid();
                         new RefreshPlayerBasketState(now, bid, cap).accept(t);
+                        new RefreshPlayerMoneyState().accept(t);
                     } else {
                         SessionUtils.serializeAndSendAsynchronously(t, new Response(ResponseType.WALLET_NOT_ENOUGH_MONEY));
                     }
